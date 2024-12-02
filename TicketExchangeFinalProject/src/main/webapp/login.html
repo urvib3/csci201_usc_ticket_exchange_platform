@@ -11,10 +11,11 @@
 	<div class = "auth-container">
 		<img id = "logo" src = "images/logo.PNG" alt = "Logo">
 		<h2>Login</h2>
-		<form id = "login-input">
+		<h3 id=loginFeedback></h3>
+		<form name="loginform" id="login-input" onsubmit="return validateLogin();">
 			<input type = "text" id = "username" placeholder = "Enter Username" required>
 			<input type = "text" id = "password" placeholder = "Enter password" required>
-			<button type = "button" id = "submit" class = "submit-login">Login</button>
+			<input type="submit" id="submit" class="submit-login" value="Login"/>
 			<button type = "button" id = "googleLogin" class = "googleLogin">
 				<img src = "images/googleLogo.png" alt = "googleLogo" class = "googleLogo">
 				Google 
@@ -25,5 +26,6 @@
 			</div>
 		</form>
 	</div>
+	<script src="js/login.js"></script>
 </body>
 </html>
