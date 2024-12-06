@@ -1,3 +1,6 @@
+-- Drop if exists
+DROP DATABASE IF EXISTS DatabaseName;
+
 -- Create the WeatherConditions database
 CREATE DATABASE TicketExchange;
 
