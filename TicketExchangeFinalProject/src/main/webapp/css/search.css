@@ -178,3 +178,26 @@ select:focus {
     }
 }
 
+.button-container {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.negotiate-button,
+.buy-button {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.negotiate-button:hover,
+.buy-button:hover {
+    background: #d70016;
+}
+
