@@ -1,0 +1,189 @@
+// Global variables
+let tickets = [];
+let currentResults = []; // Current search results for dynamic sorting
+let isMyListingsActive = false; // Track if "My Listings" is active
+let isMyInfoActive = false; // Track if "My Info" is active
+const TEST_MODE = true; // Set to true for testing with local JSON
+
+// Fetch tickets for "My Listings" and toggle the "Sort By" dropdown
+document.getElementById('mylistings-button').addEventListener('click', async () => {
+    const myListingsButton = document.getElementById('mylistings-button');
+    const sortByContainer = document.getElementById('sort-by-container');
+    const resultsContainer = document.getElementById('results');
+    const myInfoContainer = document.getElementById('my-info-container');
+
+    // Deactivate "My Info" if active
+    if (isMyInfoActive) {
+        deactivateMyInfo();
+    }
+
+    // Toggle state
+    isMyListingsActive = !isMyListingsActive;
+
+    if (isMyListingsActive) {
+        // Activate "My Listings"
+        myListingsButton.style.backgroundColor = '#007bff'; // Active color
+        myListingsButton.style.color = '#fff';
+
+        try {
+            displayLoadingMessage();
+
+            if (TEST_MODE) {
+                // Fetch from mytickets.json for testing
+                const response = await fetch('db/mytickets.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                tickets = await response.json();
+            } else {
+                // Fetch from the servlet in production
+                const response = await fetch('TicketServlet');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                tickets = await response.json();
+            }
+
+            currentResults = [...tickets]; // Initialize current results
+
+            if (currentResults.length > 0) {
+                displayResults(currentResults); // Render tickets
+                sortByContainer.style.display = 'block'; // Show "Sort By"
+            } else {
+                resultsContainer.innerHTML = '<p>No tickets found.</p>';
+                sortByContainer.style.display = 'none'; // Hide "Sort By"
+            }
+        } catch (error) {
+            console.error('Error fetching tickets:', error);
+            resultsContainer.innerHTML = '<p>Error fetching tickets. Please try again later.</p>';
+            sortByContainer.style.display = 'none'; // Hide "Sort By"
+        }
+    } else {
+        // Deactivate "My Listings"
+        deactivateMyListings(myListingsButton, sortByContainer, resultsContainer);
+    }
+});
+
+// Handle "My Info" button
+document.getElementById('myinfo-button').addEventListener('click', async () => {
+    const myInfoButton = document.getElementById('myinfo-button');
+    const sortByContainer = document.getElementById('sort-by-container');
+    const resultsContainer = document.getElementById('results');
+    const myInfoContainer = document.getElementById('my-info-container');
+
+    // Deactivate "My Listings" if active
+    if (isMyListingsActive) {
+        deactivateMyListings(
+            document.getElementById('mylistings-button'),
+            sortByContainer,
+            resultsContainer
+        );
+    }
+
+    // Toggle state
+    isMyInfoActive = !isMyInfoActive;
+
+    if (isMyInfoActive) {
+        // Activate "My Info"
+        myInfoButton.style.backgroundColor = '#007bff'; // Active color
+        myInfoButton.style.color = '#fff';
+
+        try {
+            let userInfo;
+
+            if (TEST_MODE) {
+                // Fetch from myinfo.json for testing
+                const response = await fetch('db/myinfo.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                userInfo = await response.json();
+            } else {
+                // Fetch from the servlet in production
+                const response = await fetch('UserInfoServlet');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                userInfo = await response.json();
+            }
+
+            // Render user info
+            myInfoContainer.innerHTML = `
+                <div class="info">
+                    <p>Name: ${userInfo.name}</p>
+                    <p>Username: ${userInfo.username}</p>
+                    <p>University: ${userInfo.university}</p>
+                    <p>Phone Number: ${userInfo.phoneNumber}</p>
+                    <p>Socials: ${userInfo.socials}</p>
+                </div>
+            `;
+            myInfoContainer.style.display = 'block';
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+            myInfoContainer.innerHTML = '<p>Error fetching your information. Please try again later.</p>';
+        }
+    } else {
+        // Deactivate "My Info"
+        deactivateMyInfo();
+    }
+});
+
+// Helper function to deactivate "My Listings"
+function deactivateMyListings(myListingsButton, sortByContainer, resultsContainer) {
+    isMyListingsActive = false;
+    myListingsButton.style.backgroundColor = ''; // Reset button color
+    myListingsButton.style.color = ''; // Reset text color
+    resultsContainer.innerHTML = ''; // Clear results
+    sortByContainer.style.display = 'none'; // Hide "Sort By"
+}
+
+// Helper function to deactivate "My Info"
+function deactivateMyInfo() {
+    const myInfoButton = document.getElementById('myinfo-button');
+    const myInfoContainer = document.getElementById('my-info-container');
+
+    isMyInfoActive = false;
+    myInfoButton.style.backgroundColor = ''; // Reset button color
+    myInfoButton.style.color = ''; // Reset text color
+    myInfoContainer.innerHTML = ''; // Clear "My Info"
+    myInfoContainer.style.display = 'none'; // Hide "My Info"
+}
+
+// Display results in the UI
+function displayResults(results) {
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = ''; // Clear previous results
+
+    results.forEach(ticket => {
+        const ticketDiv = document.createElement('div');
+        ticketDiv.className = 'ticket-item';
+
+        // Render ticket
+        ticketDiv.innerHTML = `
+            <a href="ticketDetails.html?ticketID=${ticket.ticketID}" class="ticket-link">
+                <img src="${ticket.poster || 'images/sclogo.png'}" alt="${ticket.eventName}" class="ticket-poster">
+                <h3>${ticket.eventName}</h3>
+                <p>Price: $${ticket.ticketPrice}</p>
+                <p>Date: ${ticket.startDate}</p>
+                <p>Details: ${ticket.additionalInfo}</p>
+                <p>Negotiable: ${ticket.negotiable ? "Yes" : "No"}</p>
+            </a>
+        `;
+        resultsContainer.appendChild(ticketDiv);
+    });
+}
+
+// Display loading message
+function displayLoadingMessage() {
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = '<p>Loading results...</p>';
+}
+
+// Display username on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const username = localStorage.getItem('username') || 'Guest';
+    const welcomeMessage = document.getElementById('welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.textContent = `${username}, welcome`;
+    }
+});
