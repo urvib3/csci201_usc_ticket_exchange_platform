@@ -112,6 +112,25 @@ body, html {
     border-color: #ff4d4d;
 }
 
+#reset-button {
+    background: #f5f5f5;
+    color: #333;
+    border: 2px solid #ccc;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#reset-button:hover {
+    background: #ddd;
+    color: #000;
+    border-color: #bbb;
+}
+
+
 #results {
     margin-top: 20px;
 }

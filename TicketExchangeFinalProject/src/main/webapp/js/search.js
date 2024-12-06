@@ -74,6 +74,20 @@ document.getElementById('negotiable').addEventListener('change', function () {
 
     displayResults(currentResults);
 });
+//lsiten for reset button click 
+document.getElementById('reset-button').addEventListener('click', function () {
+    document.getElementById('search-keyword').value = '';
+    document.getElementById('price-min').value = '';
+    document.getElementById('price-max').value = '';
+    document.getElementById('date-start').value = '';
+    document.getElementById('date-end').value = '';
+    document.getElementById('sort-by').value = 'date-asc';
+    document.getElementById('negotiable').checked = false;
+	const resultsContainer = document.getElementById('results');
+	    resultsContainer.innerHTML = '<p></p>';
+	    
+	currentResults = [];
+});
 
 //parsing
 function tokenize(str) {
