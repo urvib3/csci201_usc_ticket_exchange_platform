@@ -18,7 +18,7 @@
             <!-- Keyword Input -->
             <div class="filter-group">
                 <label for="search-keyword">Keyword:</label>
-                <input type="text" id="search-keyword" placeholder="Enter event name or keywords" required>
+                <input type="text" id="search-keyword" placeholder="Enter event name or keywords">
             </div>
 
             <!-- Price Filter -->
@@ -36,14 +36,20 @@
                     <input type="date" id="date-end">
                 </div>
 
-                <!-- Sorting Options -->
-                <div class="filter-group">
-                    <label for="sort-by">Sort By:</label>
-                    <select id="sort-by">
-                        <option value="date">Date</option>
-                        <option value="price">Price</option>
-                        <option value="popularity">Popularity</option>
-                    </select>
+                <!-- Negotiable and Sort By Filters -->
+                <div class="filter-group negotiable-sort">
+                    <div>
+                        <label for="negotiable">Negotiable:</label>
+                        <input type="checkbox" id="negotiable">
+                    </div>
+                    <div>
+                        <label for="sort-by">Sort By:</label>
+                        <select id="sort-by">
+                            <option value="date">Date</option>
+                            <option value="price">Price</option>
+                            <option value="popularity">Popularity</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
