@@ -15,6 +15,8 @@ fetch('db/tickets.json')
 
 document.getElementById('search-form').addEventListener('submit', function (event) {
     event.preventDefault();
+	
+	displayLoadingMessage();
 
     const keyword = document.getElementById('search-keyword').value.toLowerCase();
     const priceMin = parseInt(document.getElementById('price-min').value) || 0;
@@ -35,7 +37,6 @@ document.getElementById('search-form').addEventListener('submit', function (even
 document.getElementById('sort-by').addEventListener('change', function () {
     const sortBy = this.value;
 
-    //re-sort results based on the new sort option
     currentResults = currentResults.sort((a, b) => {
         if (sortBy === "price") return a.ticketPrice - b.ticketPrice;
         if (sortBy === "date") return a.startDate - b.startDate;
@@ -53,34 +54,70 @@ function tokenize(str) {
 
 // Filter tickets based on search criteria
 function fetchTickets(keyword, priceMin, priceMax, dateStart, dateEnd, sortBy, negotiable) {
-    const searchTokens = tokenize(keyword); // User input parser
+    const searchTokens = tokenize(keyword).map(normalizeDate).filter(token => token.trim() !== "");
+    console.log("Search Tokens:", searchTokens);
 
     return tickets.filter(ticket => {
-        // Keyword, additional info parser
-        const combinedText = `${ticket.eventName} ${ticket.additionalInfo}`;
-        const combinedTokens = tokenize(combinedText);
+        const eventDate = formatDateToTokens(ticket.startDate); // Normalize ticket date
+        const combinedText = `${ticket.eventName} ${ticket.additionalInfo} ${eventDate}`;
+        const combinedTokens = tokenize(combinedText).map(normalizeDate);
+        console.log("Combined Tokens:", combinedTokens);
 
-        // 1. Check if all words in the search match words in the combined text
+        // 1. Keyword filter: Allow all tickets if keyword is blank
         const matchesKeyword = searchTokens.length === 0 || searchTokens.every(token => combinedTokens.includes(token));
+        console.log(`Keyword Match (${ticket.eventName}):`, matchesKeyword);
 
-        // 2. Price filter
+        // Other filters
         const matchesPrice = ticket.ticketPrice >= priceMin && ticket.ticketPrice <= priceMax;
-
-        // 3. Date filter
-        const matchesDate = ticket.startDate >= dateStart && ticket.startDate <= dateEnd;
-
-        // 4. Negotiable filter
+        const matchesDate = (!dateStart || ticket.startDate >= dateStart) && (!dateEnd || ticket.startDate <= dateEnd);
         const matchesNegotiable = !negotiable || ticket.negotiable;
 
-        // Check if all conditions are met
         return matchesKeyword && matchesPrice && matchesDate && matchesNegotiable;
     }).sort((a, b) => {
-        // Initial sort when fetching tickets
         if (sortBy === "price") return a.ticketPrice - b.ticketPrice;
         if (sortBy === "date") return a.startDate - b.startDate;
         if (sortBy === "popularity") return b.numTickets - a.numTickets;
         return 0;
     });
+}
+
+//date-related strings in user input
+function normalizeDate(str) {
+    return str
+        .toLowerCase()
+        .replace(/\//g, '') // Replace slashes 
+        .replace(/\./g, '') // Replace dots
+        .replace(/nov/g, '11') // Replace month names with numbers
+        .replace(/dec/g, '12')
+        .replace(/jan/g, '01')
+        .replace(/feb/g, '02')
+        .replace(/mar/g, '03')
+        .replace(/apr/g, '04')
+        .replace(/may/g, '05')
+        .replace(/jun/g, '06')
+        .replace(/jul/g, '07')
+        .replace(/aug/g, '08')
+        .replace(/sep/g, '09')
+        .replace(/oct/g, '10');
+}
+
+function formatDateToTokens(date) {
+    const year = String(date).slice(0, 4);
+    const month = String(date).slice(4, 6);
+    const day = String(date).slice(6, 8);
+
+    const numericMonthDay = `${month}${day}`;
+    const textMonthDay = `${getMonthName(month)}${day}`;
+
+    return `${numericMonthDay} ${textMonthDay}`;
+}
+
+function getMonthName(month) {
+    const months = [
+        'jan', 'feb', 'mar', 'apr', 'may', 'jun',
+        'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
+    ];
+    return months[parseInt(month, 10) - 1];
 }
 
 // Display results in the UI
@@ -112,6 +149,11 @@ function displayResults(results) {
     } else {
         resultsContainer.innerHTML = '<p>No tickets found matching your criteria.</p>';
     }
+}
+
+function displayLoadingMessage() {
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = '<p>Loading results...</p>';
 }
 
 // Display username
