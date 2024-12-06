@@ -18,7 +18,7 @@ function validateLogin() {
  
  /* alternative js code 
  
- document.addEventListener("DOMContentLoaded", function() {  
+ document.addEventListener("DOMContentLoaded", function() {   
 				
 	document.getElementById('submit').addEventListener("click", () => {
 		
