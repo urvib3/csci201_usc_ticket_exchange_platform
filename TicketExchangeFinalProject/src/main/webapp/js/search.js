@@ -38,11 +38,39 @@ document.getElementById('sort-by').addEventListener('change', function () {
     const sortBy = this.value;
 
     currentResults = currentResults.sort((a, b) => {
-        if (sortBy === "price") return a.ticketPrice - b.ticketPrice;
-        if (sortBy === "date") return a.startDate - b.startDate;
-        if (sortBy === "popularity") return b.numTickets - a.numTickets;
-        return 0;
+        switch (sortBy) {
+            case "price-asc":
+                return a.ticketPrice - b.ticketPrice;
+            case "price-desc":
+                return b.ticketPrice - a.ticketPrice;
+            case "date-asc":
+                return a.startDate - b.startDate;
+            case "date-desc":
+                return b.startDate - a.startDate;
+            case "popularity-asc":
+                return a.numTickets - b.numTickets;
+            case "popularity-desc":
+                return b.numTickets - a.numTickets;
+            default:
+                return 0;
+        }
     });
+
+    displayResults(currentResults);
+});
+//listen for negoatiable tick
+document.getElementById('negotiable').addEventListener('change', function () {
+    const negotiable = this.checked;
+
+    currentResults = fetchTickets(
+        document.getElementById('search-keyword').value.toLowerCase(),
+        parseInt(document.getElementById('price-min').value) || 0,
+        parseInt(document.getElementById('price-max').value) || Number.MAX_SAFE_INTEGER,
+        parseInt(document.getElementById('date-start').value.replace(/-/g, '')) || 0,
+        parseInt(document.getElementById('date-end').value.replace(/-/g, '')) || Number.MAX_SAFE_INTEGER,
+        document.getElementById('sort-by').value,
+        negotiable
+    );
 
     displayResults(currentResults);
 });
@@ -52,7 +80,7 @@ function tokenize(str) {
     return str.toLowerCase().split(/\s+/);
 }
 
-// Filter tickets based on search criteria
+// filter tickets based on search criteria
 function fetchTickets(keyword, priceMin, priceMax, dateStart, dateEnd, sortBy, negotiable) {
     const searchTokens = tokenize(keyword).map(normalizeDate).filter(token => token.trim() !== "");
     console.log("Search Tokens:", searchTokens);
@@ -72,13 +100,25 @@ function fetchTickets(keyword, priceMin, priceMax, dateStart, dateEnd, sortBy, n
         const matchesDate = (!dateStart || ticket.startDate >= dateStart) && (!dateEnd || ticket.startDate <= dateEnd);
         const matchesNegotiable = !negotiable || ticket.negotiable;
 
-        return matchesKeyword && matchesPrice && matchesDate && matchesNegotiable;
-    }).sort((a, b) => {
-        if (sortBy === "price") return a.ticketPrice - b.ticketPrice;
-        if (sortBy === "date") return a.startDate - b.startDate;
-        if (sortBy === "popularity") return b.numTickets - a.numTickets;
-        return 0;
-    });
+		return matchesKeyword && matchesPrice && matchesDate && matchesNegotiable;
+		    }).sort((a, b) => {
+		        switch (sortBy) {
+		            case "date-asc":
+		                return a.startDate - b.startDate;
+		            case "date-desc":
+		                return b.startDate - a.startDate;
+		            case "price-asc":
+		                return a.ticketPrice - b.ticketPrice;
+		            case "price-desc":
+		                return b.ticketPrice - a.ticketPrice;
+		            case "popularity-asc":
+		                return a.numTickets - b.numTickets;
+		            case "popularity-desc":
+		                return b.numTickets - a.numTickets;
+		            default:
+		                return 0;
+		        }
+		    });
 }
 
 //date-related strings in user input
@@ -120,7 +160,7 @@ function getMonthName(month) {
     return months[parseInt(month, 10) - 1];
 }
 
-// Display results in the UI
+//display results in the UI
 function displayResults(results) {
     const resultsContainer = document.getElementById('results');
     resultsContainer.innerHTML = '';
