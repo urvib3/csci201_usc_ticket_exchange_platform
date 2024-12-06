@@ -23,21 +23,34 @@ document.getElementById('search-form').addEventListener('submit', function (even
     displayResults(results);
 });
 
-//filter tickets based on search criteria
+function tokenize(str) {//parser
+    return str.toLowerCase().split(/\s+/);
+}
+
 function fetchTickets(keyword, priceMin, priceMax, dateStart, dateEnd, sortBy) {
-    return tickets
-        .filter(ticket => {
-            const matchesKeyword = ticket.eventName.toLowerCase().includes(keyword);
-            const matchesPrice = ticket.ticketPrice >= priceMin && ticket.ticketPrice <= priceMax;
-            const matchesDate = ticket.startDate >= dateStart && ticket.startDate <= dateEnd;
-            return matchesKeyword && matchesPrice && matchesDate;
-        })
-        .sort((a, b) => {
-            if (sortBy === "price") return a.ticketPrice - b.ticketPrice;
-            if (sortBy === "date") return a.startDate - b.startDate;
-            if (sortBy === "popularity") return b.numTickets - a.numTickets; // Assuming popularity is number of tickets
-            return 0;
-        });
+    const searchTokens = tokenize(keyword);//user input parser
+
+    return tickets.filter(ticket => {
+        //keyword, additional info parser
+        const combinedText = `${ticket.eventName} ${ticket.additionalInfo}`;
+        const combinedTokens = tokenize(combinedText);
+
+        //check if at least one word in the search matches any word in the combined text
+        const matchesKeyword = searchTokens.some(token => combinedTokens.includes(token));
+
+        //other filters
+        const matchesPrice = ticket.ticketPrice >= priceMin && ticket.ticketPrice <= priceMax;
+        const matchesDate = ticket.startDate >= dateStart && ticket.startDate <= dateEnd;
+
+        //return true if all conditions are met
+        return matchesKeyword && matchesPrice && matchesDate;
+    }).sort((a, b) => {
+        //sort by
+        if (sortBy === "price") return a.ticketPrice - b.ticketPrice;
+        if (sortBy === "date") return a.startDate - b.startDate;
+        if (sortBy === "popularity") return b.numTickets - a.numTickets;
+        return 0;
+    });
 }
 
 //display results in the UI
