@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		fetch("/Register", {
 			method: "POST",
 			headers: {"Content-Type": "application/x-www-form-urlencoded"},
-			body: new URLSearchParams(data)   
+			body: new URLSearchParams(data)  
 		})
 		.then(response => response.json())
 		.then(data => {

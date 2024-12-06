@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		};
 		
 		//we should check if the email is in our database, i'm not sure how to send an email for resetting email either link or like a 
-		// temporary code or something?  
+		// temporary code or something? 
 		fetch("/forgotPassword", {
 			method: "POST",
 			headers: {"Content-Type" : "application/x-www-form-urlencoded"},
