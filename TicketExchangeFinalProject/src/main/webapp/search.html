@@ -9,7 +9,7 @@
 <body>
     <div class="bg"></div>
     <div class="search-container">
-        <h2>Find Your Perfect Tickets</h2>
+        <h2>Find Your Tickets</h2>
         <form id="search-form">
             <input type="text" id="search-keyword" placeholder="Search by event name or keywords" required>
             <div class="filters">
@@ -19,15 +19,23 @@
                     <input type="number" id="price-max" placeholder="Max Price">
                 </div>
                 <div class="filter-group">
-                    <label for="date-range">Event Date:</label>
+                    <label for="date-start">Date Range:</label>
                     <input type="date" id="date-start">
                     <input type="date" id="date-end">
+                </div>
+                <div class="filter-group">
+                    <label for="sort-by">Sort By:</label>
+                    <select id="sort-by">
+                        <option value="date">Date</option>
+                        <option value="price">Price</option>
+                        <option value="popularity">Popularity</option>
+                    </select>
                 </div>
             </div>
             <button type="submit" id="search-button">Search</button>
         </form>
         <div id="results">
-            <!-- Search results will appear here -->
+            <!-- Search results BELOW -->
         </div>
     </div>
 </body>
