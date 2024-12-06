@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Tickets</title>
     <link rel="stylesheet" href="css/search.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
@@ -9,20 +10,33 @@
 <body>
     <div class="bg"></div>
     <div class="search-container">
-        <h2>Find Your Tickets</h2>
+        <!-- Welcome Message -->
+        <h2 id="welcome-message">Find Your Tickets</h2>
+
+        <!-- Search Form -->
         <form id="search-form">
-            <input type="text" id="search-keyword" placeholder="Search by event name or keywords" required>
+            <!-- Keyword Input -->
+            <div class="filter-group">
+                <label for="search-keyword">Keyword:</label>
+                <input type="text" id="search-keyword" placeholder="Enter event name or keywords" required>
+            </div>
+
+            <!-- Price Filter -->
             <div class="filters">
                 <div class="filter-group">
                     <label for="price-min">Price Range:</label>
                     <input type="number" id="price-min" placeholder="Min Price">
                     <input type="number" id="price-max" placeholder="Max Price">
                 </div>
+
+                <!-- Date Filter -->
                 <div class="filter-group">
                     <label for="date-start">Date Range:</label>
                     <input type="date" id="date-start">
                     <input type="date" id="date-end">
                 </div>
+
+                <!-- Sorting Options -->
                 <div class="filter-group">
                     <label for="sort-by">Sort By:</label>
                     <select id="sort-by">
@@ -32,11 +46,16 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" id="search-button">Search</button>
+
+            <!-- Submit Button -->
+            <div class="button-group">
+                <button type="submit" id="search-button">Search</button>
+            </div>
         </form>
         <div id="results">
             <!-- Search results BELOW -->
         </div>
     </div>
+    <script src="js/search.js"></script>
 </body>
 </html>
