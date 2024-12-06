@@ -138,7 +138,7 @@ function displayResults(results) {
                     <img src="${ticket.poster || 'images/sclogo.png'}" alt="${ticket.eventName}" class="ticket-poster">
                     <div>
                         <h3>${ticket.eventName}</h3>
-                        <p>Price: $${ticket.ticketPrice}</p>
+                        <h2>$${ticket.ticketPrice}</h2>
                         <p>Date: ${formattedDate}</p>
                         <p>Details: ${ticket.additionalInfo}</p>
                     </div>
