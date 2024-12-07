@@ -66,13 +66,14 @@ public class Register extends HttpServlet {
             }
 
             // Insert the new user into the database
-            String insertQuery = "INSERT INTO users (username, password, university, phone_number, socials) VALUES (?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO users (username, fullname, password, university, phone_number, socials) VALUES (?, ?, ?, ?, ?, ?)";
             ps = conn.prepareStatement(insertQuery);
             ps.setString(1, username);
-            ps.setString(2, password); // Store password in plain text (hashing recommended in production)
-            ps.setString(3, university);
-            ps.setString(4, phoneNumber);
-            ps.setString(5, socials);
+            ps.setString(2, fullname);
+            ps.setString(3, password); // Store password in plain text (hashing recommended in production)
+            ps.setString(4, university);
+            ps.setString(5, phoneNumber);
+            ps.setString(6, socials);
 
             int rowsAffected = ps.executeUpdate();
 

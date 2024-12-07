@@ -3,7 +3,7 @@ let tickets = [];
 let currentResults = []; // Current search results for dynamic sorting
 let isMyListingsActive = false; // Track if "My Listings" is active
 let isMyInfoActive = false; // Track if "My Info" is active
-const TEST_MODE = true; // Set to true for testing with local JSON
+const TEST_MODE = false; // Set to true for testing with local JSON
 
 // Fetch tickets for "My Listings" and toggle the "Sort By" dropdown
 document.getElementById('mylistings-button').addEventListener('click', async () => {
@@ -100,7 +100,12 @@ document.getElementById('myinfo-button').addEventListener('click', async () => {
                 userInfo = await response.json();
             } else {
                 // Fetch from the servlet in production
-                const response = await fetch('UserInfoServlet');
+				const userId = localStorage.getItem('user_id');
+				if(!userId) {
+					document.getElementById('welcome-message').value = 'Error Authenticating'; 
+					return;
+				}
+                const response = await fetch('UserInfo?user_id=' + encodeURIComponent(userId));
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -110,10 +115,10 @@ document.getElementById('myinfo-button').addEventListener('click', async () => {
             // Render user info
             myInfoContainer.innerHTML = `
                 <div class="info">
-                    <p>Name: ${userInfo.name}</p>
+                    <p>Name: ${userInfo.fullname}</p>
                     <p>Username: ${userInfo.username}</p>
                     <p>University: ${userInfo.university}</p>
-                    <p>Phone Number: ${userInfo.phoneNumber}</p>
+                    <p>Phone Number: ${userInfo.phone}</p>
                     <p>Socials: ${userInfo.socials}</p>
                 </div>
             `;

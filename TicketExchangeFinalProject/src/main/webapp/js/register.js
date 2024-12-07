@@ -13,7 +13,7 @@ function validateRegister() {
         username: user,
         password: pass,
         university: uni,
-        phoneNumber: phoneNum, 
+        phone: phoneNum, 
         socials: socials
     };
 	
