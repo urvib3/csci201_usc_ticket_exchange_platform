@@ -2,7 +2,8 @@
 let tickets = [];
 let currentResults = []; //current search results for dynamic sorting
 
-fetch('db/tickets.json')
+// fetch('db/tickets.json')
+fetch("/Search")
     .then(response => response.json())
     .then(data => {
         tickets = data;
@@ -15,8 +16,8 @@ fetch('db/tickets.json')
 
 document.getElementById('search-form').addEventListener('submit', function (event) {
     event.preventDefault();
-	
-	displayLoadingMessage();
+
+    displayLoadingMessage();
 
     const keyword = document.getElementById('search-keyword').value.toLowerCase();
     const priceMin = parseInt(document.getElementById('price-min').value) || 0;
