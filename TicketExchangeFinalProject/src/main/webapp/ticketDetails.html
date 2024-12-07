@@ -8,13 +8,25 @@
 </head>
 <body>
     <div class="ticket-details-container">
-        <h1 id="event-name">Loading...</h1>
-        <img id="poster" src="" alt="Event Poster">
-        <h2 id="price"></h2>
-        <p id="date"></p>
-        <p id="details"></p>
-        <button id="buy-button">Buy Ticket</button>
+        <div class="event-header">
+            <h1 id="event-name">Loading...</h1>
+            <img id="poster" src="" alt="Event Poster" class="event-poster">
+        </div>
+
+        <div class="event-info">
+            <h2 id="price" class="gradient-price"></h2>
+            <p><strong>Date:</strong> <span id="date"></span></p>
+            
+            <p><strong>Location:</strong> <span id="location"></span></p>
+            <p><strong>Details:</strong> <span id="details"></span></p>
+        </div>
+
+        <div class="action-buttons">
+            <button id="buy-button" class="button-primary">Buy Ticket</button>
+            <button id="negotiate-button" class="button-secondary">Negotiate (Chat)</button>
+        </div>
     </div>
+
     <script src="js/ticketDetails.js"></script>
 </body>
 </html>

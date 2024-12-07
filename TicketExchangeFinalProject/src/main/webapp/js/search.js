@@ -1,9 +1,7 @@
-//Load tickets from JSON
 let tickets = [];
-let currentResults = []; //current search results for dynamic sorting
+let currentResults = [];
 
-// fetch('db/tickets.json')
-fetch("/Search")
+fetch('db/tickets.json')
     .then(response => response.json())
     .then(data => {
         tickets = data;
@@ -13,7 +11,8 @@ fetch("/Search")
         console.error('Error loading tickets:', error);
         document.getElementById('results').innerHTML = '<p>Unable to load tickets. Please try again later.</p>';
     });
-
+	
+//listener for form submission
 document.getElementById('search-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -27,14 +26,11 @@ document.getElementById('search-form').addEventListener('submit', function (even
     const sortBy = document.getElementById('sort-by').value;
     const negotiable = document.getElementById('negotiable').checked;
 
-    //fetch and store the results in the global variable
     currentResults = fetchTickets(keyword, priceMin, priceMax, dateStart, dateEnd, sortBy, negotiable);
-
-    //display the results
     displayResults(currentResults);
 });
 
-//listen for changes in the "sort by" dropdown
+//listener for "Sort By" dropdown
 document.getElementById('sort-by').addEventListener('change', function () {
     const sortBy = this.value;
 
@@ -59,7 +55,25 @@ document.getElementById('sort-by').addEventListener('change', function () {
 
     displayResults(currentResults);
 });
-//listen for negoatiable tick
+
+//listener for event type dropdown
+document.getElementById('ticket-type').addEventListener('change', function () {
+    const eventType = this.value;
+
+    currentResults = fetchTickets(
+        document.getElementById('search-keyword').value.toLowerCase(),
+        parseInt(document.getElementById('price-min').value) || 0,
+        parseInt(document.getElementById('price-max').value) || Number.MAX_SAFE_INTEGER,
+        parseInt(document.getElementById('date-start').value.replace(/-/g, '')) || 0,
+        parseInt(document.getElementById('date-end').value.replace(/-/g, '')) || Number.MAX_SAFE_INTEGER,
+        document.getElementById('sort-by').value,
+        document.getElementById('negotiable').checked
+    );
+
+    displayResults(currentResults);
+});
+
+//listener for negotiable checkbox
 document.getElementById('negotiable').addEventListener('change', function () {
     const negotiable = this.checked;
 
@@ -75,7 +89,8 @@ document.getElementById('negotiable').addEventListener('change', function () {
 
     displayResults(currentResults);
 });
-//lsiten for reset button click 
+
+// Reset button functionality
 document.getElementById('reset-button').addEventListener('click', function () {
     document.getElementById('search-keyword').value = '';
     document.getElementById('price-min').value = '';
@@ -83,58 +98,57 @@ document.getElementById('reset-button').addEventListener('click', function () {
     document.getElementById('date-start').value = '';
     document.getElementById('date-end').value = '';
     document.getElementById('sort-by').value = 'date-asc';
+    document.getElementById('ticket-type').value = ''; // Reset ticket type dropdown
     document.getElementById('negotiable').checked = false;
-	const resultsContainer = document.getElementById('results');
-	    resultsContainer.innerHTML = '<p></p>';
-	    
-	currentResults = [];
+
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = '<p></p>';
+
+    currentResults = [];
 });
 
-//parsing
 function tokenize(str) {
-    return str.toLowerCase().split(/\s+/);
+    return str.toLowerCase().split(/\s+/); // Split on spaces and convert to lowercase
 }
 
-// filter tickets based on search criteria
+//fetch tickets
 function fetchTickets(keyword, priceMin, priceMax, dateStart, dateEnd, sortBy, negotiable) {
     const searchTokens = tokenize(keyword).map(normalizeDate).filter(token => token.trim() !== "");
-    console.log("Search Tokens:", searchTokens);
+    const ticketType = document.getElementById("ticket-type").value;
 
     return tickets.filter(ticket => {
-        const eventDate = formatDateToTokens(ticket.startDate); // Normalize ticket date
+        const eventDate = formatDateToTokens(ticket.startDate);
         const combinedText = `${ticket.eventName} ${ticket.additionalInfo} ${eventDate}`;
         const combinedTokens = tokenize(combinedText).map(normalizeDate);
-        console.log("Combined Tokens:", combinedTokens);
 
-        // 1. Keyword filter: Allow all tickets if keyword is blank
-        const matchesKeyword = searchTokens.length === 0 || searchTokens.every(token => combinedTokens.includes(token));
-        console.log(`Keyword Match (${ticket.eventName}):`, matchesKeyword);
-
-        // Other filters
+        const matchesKeyword = searchTokens.every(token => combinedTokens.includes(token));
+        const matchesType = ticketType === "" || ticket.type === ticketType;
         const matchesPrice = ticket.ticketPrice >= priceMin && ticket.ticketPrice <= priceMax;
         const matchesDate = (!dateStart || ticket.startDate >= dateStart) && (!dateEnd || ticket.startDate <= dateEnd);
         const matchesNegotiable = !negotiable || ticket.negotiable;
 
-		return matchesKeyword && matchesPrice && matchesDate && matchesNegotiable;
-		    }).sort((a, b) => {
-		        switch (sortBy) {
-		            case "date-asc":
-		                return a.startDate - b.startDate;
-		            case "date-desc":
-		                return b.startDate - a.startDate;
-		            case "price-asc":
-		                return a.ticketPrice - b.ticketPrice;
-		            case "price-desc":
-		                return b.ticketPrice - a.ticketPrice;
-		            case "popularity-asc":
-		                return a.numTickets - b.numTickets;
-		            case "popularity-desc":
-		                return b.numTickets - a.numTickets;
-		            default:
-		                return 0;
-		        }
-		    });
+        return matchesKeyword && matchesType && matchesPrice && matchesDate && matchesNegotiable;
+    }).sort((a, b) => {
+        switch (sortBy) {
+            case "price-asc":
+                return a.ticketPrice - b.ticketPrice;
+            case "price-desc":
+                return b.ticketPrice - a.ticketPrice;
+            case "date-asc":
+                return a.startDate - b.startDate;
+            case "date-desc":
+                return b.startDate - a.startDate;
+            case "popularity-asc":
+                return a.numTickets - b.numTickets;
+            case "popularity-desc":
+                return b.numTickets - a.numTickets;
+            default:
+                return 0;
+        }
+    });
 }
+
+
 
 //date-related strings in user input
 function normalizeDate(str) {

@@ -36,6 +36,16 @@
                     <input type="date" id="date-end">
                 </div>
 
+                <!-- Ticket Type Filter -->
+                <div class="filter-group">
+                    <label for="ticket-type"></label>
+                    <select id="ticket-type">
+                        <option value="">All Events</option>
+                        <option value="concert">Concert</option>
+                        <option value="sports">Sports</option>
+                    </select>
+                </div>
+
                 <!-- Negotiable and Sort By Filters -->
                 <div class="filter-group negotiable-sort">
                     <div>
@@ -44,23 +54,23 @@
                     </div>
                     <div>
                         <label for="sort-by">Sort By:</label>
-						<select id="sort-by">
-   						 	<option value="date-asc">Date (Asc)</option>
-   						 	<option value="date-desc">Date (Desc)</option>
-   						 	<option value="price-asc">Price (Asc)</option>
-						    <option value="price-desc">Price (Desc)</option>
-  						 	<option value="popularity-asc">Popularity (Asc)</option>
-    						<option value="popularity-desc">Popularity (Desc)</option>
-						</select>
+                        <select id="sort-by">
+                            <option value="date-asc">Date (Asc)</option>
+                            <option value="date-desc">Date (Desc)</option>
+                            <option value="price-asc">Price (Asc)</option>
+                            <option value="price-desc">Price (Desc)</option>
+                            <option value="popularity-asc">Popularity (Asc)</option>
+                            <option value="popularity-desc">Popularity (Desc)</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
             <!-- Buttons -->
             <div class="button-group">
-    			<button type="submit" id="search-button">Search</button>
-    			<button type="button" id="reset-button">Reset</button>
-			</div>
+                <button type="submit" id="search-button">Search</button>
+                <button type="button" id="reset-button">Reset</button>
+            </div>
             
         </form>
         <div id="results">
