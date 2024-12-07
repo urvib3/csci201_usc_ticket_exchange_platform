@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('user_id');
     if(!token) {
       // User not logged in
       window.location.href = "login.html";
