@@ -1,0 +1,74 @@
+[
+    {
+        "ticketID": 1,
+        "userID": 101,
+        "eventName": "Concert A",
+        "startDate": 20231215,
+        "endDate": 20231215,
+        "ticketPrice": 50,
+        "additionalInfo": "Row 5",
+        "negotiable": true,
+        "numTickets": 2,
+        "status": 0
+    },
+    {
+        "ticketID": 2,
+        "userID": 102,
+        "eventName": "Sports B",
+        "startDate": 20231220,
+        "endDate": 20231221,
+        "ticketPrice": 75,
+        "additionalInfo": "VIP Section",
+        "negotiable": false,
+        "numTickets": 4,
+        "status": 1
+    },
+    {
+        "ticketID": 3,
+        "userID": 103,
+        "eventName": "Concert C",
+        "startDate": 20240110,
+        "endDate": 20240110,
+        "ticketPrice": 60,
+        "additionalInfo": "Front Row",
+        "negotiable": true,
+        "numTickets": 1,
+        "status": 0
+    },
+    {
+        "ticketID": 4,
+        "userID": 104,
+        "eventName": "Theater D",
+        "startDate": 20240115,
+        "endDate": 20240116,
+        "ticketPrice": 100,
+        "additionalInfo": "Balcony",
+        "negotiable": false,
+        "numTickets": 3,
+        "status": 2
+    },
+    {
+        "ticketID": 5,
+        "userID": 105,
+        "eventName": "Sports E",
+        "startDate": 20240120,
+        "endDate": 20240121,
+        "ticketPrice": 80,
+        "additionalInfo": "Field Level",
+        "negotiable": true,
+        "numTickets": 5,
+        "status": 3
+    },
+    {
+        "ticketID": 6,
+        "userID": 106,
+        "eventName": "Concert F",
+        "startDate": 20240201,
+        "endDate": 20240202,
+        "ticketPrice": 55,
+        "additionalInfo": "General Admission",
+        "negotiable": false,
+        "numTickets": 2,
+        "status": 0
+    }
+]
