@@ -1,0 +1,129 @@
+@charset "UTF-8";
+
+body, html {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	font-family: Lato, sans-serif;
+	background-color: pale yellow;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.bg {
+	position: fixed;
+	z-index: -1;
+	top: 0;
+	left:0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/bgImage.png'); 
+	background-size: cover;
+	background-position: center; 
+	background-repeat: no-repeat;
+}
+
+#logo {
+	width: 350px;
+	height: 350px;
+	margin-bottom: -25px;
+	margin-top: -195px;
+}
+
+.profile {
+	background: rgba(255, 255, 255, 0.8);
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	width: 50vw;
+	height: 300px;
+}
+
+.profile h2 {
+	font-size: 24px;
+	margin-top: -50px;
+	color: #333;
+}
+
+.buttons button {
+	width: 35%;
+	padding: 10px;
+    margin-top: 5%;
+	margin-left: 5%;
+    margin-right: 5%;
+	background: #feb3a2;
+	color: #d70016;
+	border: 3px solid #d70016;
+	border-radius: 6px;
+	font-size: 24px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.buttons button:hover {
+	background-color: #ff9999;
+    border-color: #ff0000; 
+    color: #fff;
+}
+
+#results {
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+#sort-by-container{
+    margin-top: 20px;
+}
+
+.info{
+    background-color: white;
+    border-radius: 8px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+.info p{
+    padding: 20px;
+    margin-left: 5%;
+}
+
+/* Ticket Items */
+.ticket-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+    max-width: 100%; /* Prevent overflow */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.ticket-item:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ticket-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%; /* Adjust width */
+    box-sizing: border-box;
+}
+.ticket-poster {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+

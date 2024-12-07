@@ -1,0 +1,38 @@
+[
+    {
+        "ticketID": 1,
+        "userID": 5,
+        "eventName": "Concert A",
+        "startDate": 20231215,
+        "endDate": 20231215,
+        "ticketPrice": 50,
+        "additionalInfo": "Row 5",
+        "negotiable": true,
+        "numTickets": 2,
+        "status": 0
+    },
+    {
+        "ticketID": 2,
+        "userID": 5,
+        "eventName": "Sports B",
+        "startDate": 20231220,
+        "endDate": 20231221,
+        "ticketPrice": 75,
+        "additionalInfo": "VIP Section",
+        "negotiable": false,
+        "numTickets": 4,
+        "status": 1
+    },
+    {
+        "ticketID": 3,
+        "userID": 5,
+        "eventName": "Concert C",
+        "startDate": 20240110,
+        "endDate": 20240110,
+        "ticketPrice": 60,
+        "additionalInfo": "Front Row",
+        "negotiable": true,
+        "numTickets": 1,
+        "status": 0
+    }
+]
