@@ -131,3 +131,40 @@ body, html {
     border-radius: 5px;
 }
 
+/* Style for the top-right buttons container */
+.top-right-buttons {
+    position: fixed;
+    top: 10px;
+    right: 50px;
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Style for individual buttons */
+.top-right-buttons button {
+    width: 50%;
+	padding: 10px;
+    margin-top: 5%;
+	margin-left: 5%;
+    margin-right: 5%;
+	background: #feb3a2;
+	color: #d70016;
+	border: 3px solid #d70016;
+	border-radius: 6px;
+	font-size: 24px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+/* Button hover effect */
+.top-right-buttons button:hover {
+    background-color: #0056b3;
+}
+
+/* Button focus effect */
+.top-right-buttons button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
