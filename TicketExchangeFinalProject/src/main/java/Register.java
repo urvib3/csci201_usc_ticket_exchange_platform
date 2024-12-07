@@ -18,7 +18,7 @@ public class Register extends HttpServlet {
 
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve user input from the request
-        String fullname = request.getParameter("fullname");
+        String fullname = request.getParameter("name");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String university = request.getParameter("university");
