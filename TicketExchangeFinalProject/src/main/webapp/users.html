@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Users - Authenticated Area</title>
+<link rel="stylesheet" href="css/users.css">
+</head>
+<body>
+<header>
+  <nav>
+    <ul>
+      <li><a href="#" data-section="section-postings">My Postings</a></li>
+      <li><a href="#" data-section="section-past-tickets">Past Tickets Sold</a></li>
+      <li><a href="#" data-section="section-offers">Offers</a></li>
+      <li><a href="#" data-section="section-favorites">Favorites</a></li>
+      <li><a href="#" data-section="section-profile">Profile</a></li>
+      <li><button id="logoutBtn">Logout</button></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <!-- My Postings Section -->
+  <section id="section-postings" class="page-section hidden">
+    <h2>My Current Postings</h2>
+    <button id="add-posting-btn">Add New Posting</button>
+    <table id="postings-table">
+      <thead>
+        <tr>
+          <th>Event Name</th>
+          <th>Price</th>
+          <th>Event Slot</th>
+          <th>Tickets</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- Past Tickets Sold Section -->
+  <section id="section-past-tickets" class="page-section hidden">
+    <h2>Past Tickets Sold</h2>
+    <table id="past-tickets-table">
+      <thead>
+        <tr>
+          <th>Event Name</th>
+          <th>Sold Price</th>
+          <th>Event Slot</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- Offers Section -->
+  <section id="section-offers" class="page-section hidden">
+    <h2>Offers</h2>
+    <table id="offers-table">
+      <thead>
+        <tr>
+          <th>Event Name</th>
+          <th>Offer Price</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- Favorites Section -->
+  <section id="section-favorites" class="page-section hidden">
+    <h2>Favorite Postings</h2>
+    <ul id="favorites-list"></ul>
+  </section>
+
+  <!-- Profile Section -->
+  <section id="section-profile" class="page-section hidden">
+    <h2>Edit Profile</h2>
+    <form id="profile-form">
+      <div>
+        <label for="profileName">Name/Nickname:</label>
+        <input type="text" id="profileName" name="profileName" />
+      </div>
+      <div>
+        <label for="profilePhone">Phone Number:</label>
+        <input type="text" id="profilePhone" name="profilePhone" />
+      </div>
+      <div>
+        <label for="profileEmail">Email:</label>
+        <input type="email" id="profileEmail" name="profileEmail" />
+      </div>
+      <div>
+        <label for="profileContact">Other Contact Methods (JSON):</label>
+        <textarea id="profileContact" name="profileContact"></textarea>
+      </div>
+      <button type="submit" id="save-profile-btn">Save Profile</button>
+    </form>
+  </section>
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/users.js"></script>
+</body>
+</html>
