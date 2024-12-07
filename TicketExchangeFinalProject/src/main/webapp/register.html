@@ -2,33 +2,30 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Search Tickets</title>
-    <link rel="stylesheet" href="css/search.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+	<title>Register</title>
+	<link rel = "stylesheet" href = "css/register.css">
+	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+	<script src="js/register.js"></script>
 </head>
 <body>
-    <div class="bg"></div>
-    <div class="search-container">
-        <h2>Find Your Perfect Tickets</h2>
-        <form id="search-form">
-            <input type="text" id="search-keyword" placeholder="Search by event name or keywords" required>
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="price-min">Price Range:</label>
-                    <input type="number" id="price-min" placeholder="Min Price">
-                    <input type="number" id="price-max" placeholder="Max Price">
-                </div>
-                <div class="filter-group">
-                    <label for="date-range">Event Date:</label>
-                    <input type="date" id="date-start">
-                    <input type="date" id="date-end">
-                </div>
-            </div>
-            <button type="submit" id="search-button">Search</button>
-        </form>
-        <div id="results">
-            <!-- Search results will appear here -->
-        </div>
-    </div>
+    <div class = "bg"></div>
+	<div class = "page">
+	<div class = "auth-container">
+		<img id = "logo" src = "images/logo.PNG" alt = "Logo">
+		<h2>Create Account</h2>
+		<form id = "register-input"> 
+			<input type = "text" id = "fullname" placeholder = "Enter Full Name" required> 
+			<input type = "text" id = "username" placeholder = "Enter email or username" required> 
+			<input type = "text" id = "password" placeholder = "Enter password" required>
+			<input type = "text" id = "university" placeholder = "Enter University" required>
+			<input type = "text" id = "phone" placeholder = "Enter phone # (Optional)">
+			<input type = "text" id = "socials" placeholder = "Enter socials (Optional)">
+			<button type = "button" id = "submit" class = "submit-register">Create Account</button>
+		</form>
+	</div>
+	<div class = "links">
+		<a href = "login.html">Go to Login Page</a>
+	</div>
+	</div>
 </body>
 </html>
