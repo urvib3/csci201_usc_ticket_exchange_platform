@@ -37,9 +37,15 @@ document.getElementById('mylistings-button').addEventListener('click', async () 
                 tickets = await response.json();
             } else {
                 // Fetch from the servlet in production
-                const response = await fetch('TicketServlet');
+				const userId = localStorage.getItem('user_id');
+								if(!userId) {
+									document.getElementById('welcome-message').value = 'Error Authenticating'; 
+									return;
+								}
+                const response = await fetch('UserTicketListings?user_id=' + encodeURIComponent(userId));
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+					const errorResponse = await response.json();  // Parse the response as JSON
+					throw new Error(errorResponse.message || `HTTP error! Status: ${response.status}`);
                 }
                 tickets = await response.json();
             }
@@ -55,7 +61,7 @@ document.getElementById('mylistings-button').addEventListener('click', async () 
             }
         } catch (error) {
             console.error('Error fetching tickets:', error);
-            resultsContainer.innerHTML = '<p>Error fetching tickets. Please try again later.</p>';
+            resultsContainer.innerHTML = `<p>${error.message}</p>`; // Display the specific error message
             sortByContainer.style.display = 'none'; // Hide "Sort By"
         }
     } else {
@@ -99,7 +105,6 @@ document.getElementById('myinfo-button').addEventListener('click', async () => {
                 }
                 userInfo = await response.json();
             } else {
-                // Fetch from the servlet in production
 				const userId = localStorage.getItem('user_id');
 				if(!userId) {
 					document.getElementById('welcome-message').value = 'Error Authenticating'; 
@@ -131,6 +136,32 @@ document.getElementById('myinfo-button').addEventListener('click', async () => {
         // Deactivate "My Info"
         deactivateMyInfo();
     }
+});
+
+//listener for "Sort By" dropdown
+document.getElementById('sort-by').addEventListener('change', function () {
+    const sortBy = this.value;
+
+    currentResults = currentResults.sort((a, b) => {
+        switch (sortBy) {
+            case "price-asc":
+                return a.ticketPrice - b.ticketPrice;
+            case "price-desc":
+                return b.ticketPrice - a.ticketPrice;
+            case "date-asc":
+                return a.startDate - b.startDate;
+            case "date-desc":
+                return b.startDate - a.startDate;
+            case "popularity-asc":
+                return a.numTickets - b.numTickets;
+            case "popularity-desc":
+                return b.numTickets - a.numTickets;
+            default:
+                return 0;
+        }
+    });
+
+    displayResults(currentResults);
 });
 
 // Helper function to deactivate "My Listings"
