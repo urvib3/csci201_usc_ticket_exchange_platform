@@ -202,8 +202,8 @@ select:focus {
     text-align: right;
 }
 
-.negotiate-button,
-.buy-button {
+.buy-button,
+.negotiate-button {
     background: #ff4d4d;
     color: white;
     border: none;
@@ -212,11 +212,61 @@ select:focus {
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
+    margin: 10px;
+    margin-left: 10px;
     transition: background 0.3s ease;
 }
 
-.negotiate-button:hover,
-.buy-button:hover {
+.buy-button:hover,
+.negotiate-button:hover {
     background: #d70016;
 }
+
+
+@keyframes gradient-text {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#welcome-message {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    background-size: 200% 200%;
+    background: linear-gradient(270deg, #8e44ad, #d35400);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-text 3s ease infinite;
+}
+
+@keyframes gradient-price {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-price {
+    font-size: 25px;
+    font-weight: bold;
+    background-size: 200% 200%;
+    background: linear-gradient(270deg, #8e44ad, #d35400);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-price 3s ease infinite;
+    text-align: center;
+}
+
 

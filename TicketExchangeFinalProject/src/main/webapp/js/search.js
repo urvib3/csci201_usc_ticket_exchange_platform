@@ -177,7 +177,7 @@ function getMonthName(month) {
 //display results in the UI
 function displayResults(results) {
     const resultsContainer = document.getElementById('results');
-    resultsContainer.innerHTML = '';
+    resultsContainer.innerHTML = ''; // Clear previous results
 
     if (results.length > 0) {
         results.forEach(ticket => {
@@ -186,15 +186,13 @@ function displayResults(results) {
 
             const formattedDate = `${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)}`;
 
-            //build the ticket HTML
             ticketDiv.innerHTML = `
                 <a href="ticketDetails.html?ticketID=${ticket.ticketID}" class="ticket-link">
                     <img src="${ticket.poster || 'images/sclogo.png'}" alt="${ticket.eventName}" class="ticket-poster">
                     <div>
                         <h3>${ticket.eventName}</h3>
-                        <h2>$${ticket.ticketPrice}</h2>
-                        <p>Date: ${formattedDate}</p>
-                        <p>Details: ${ticket.additionalInfo}</p>
+                        <h2 class="gradient-price">$${ticket.ticketPrice}</h2>
+						<p>Date: ${formattedDate}</p>
                     </div>
                 </a>
             `;
@@ -202,13 +200,22 @@ function displayResults(results) {
             const buttonContainer = document.createElement('div');
             buttonContainer.className = 'button-container';
 
-            if (ticket.negotiable) {//if negotiable display the negotiate/buy button
+            if (ticket.negotiable) {
+                const buyButton = document.createElement('button');
+                buyButton.textContent = 'Buy';
+                buyButton.className = 'buy-button';
+                buyButton.addEventListener('click', () => {
+                    alert(`Buying ticket: ${ticket.eventName}`);
+                });
+
                 const negotiateButton = document.createElement('button');
-                negotiateButton.textContent = 'Negotiate/Buy';
+                negotiateButton.textContent = 'Negotiate (Chat)';
                 negotiateButton.className = 'negotiate-button';
                 negotiateButton.addEventListener('click', () => {
-                    alert(`Negotiating ticket: ${ticket.eventName}`);
+                    alert(`Starting negotiation for: ${ticket.eventName}`);
                 });
+
+                buttonContainer.appendChild(buyButton);
                 buttonContainer.appendChild(negotiateButton);
             } else {
                 const buyButton = document.createElement('button');
@@ -217,6 +224,7 @@ function displayResults(results) {
                 buyButton.addEventListener('click', () => {
                     alert(`Buying ticket: ${ticket.eventName}`);
                 });
+
                 buttonContainer.appendChild(buyButton);
             }
 
@@ -228,6 +236,7 @@ function displayResults(results) {
         resultsContainer.innerHTML = '<p>No tickets found matching your criteria.</p>';
     }
 }
+
 
 function displayLoadingMessage() {
     const resultsContainer = document.getElementById('results');
