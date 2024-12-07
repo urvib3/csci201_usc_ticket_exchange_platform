@@ -39,10 +39,8 @@ public class Login extends HttpServlet {
 		Statement st = null;
 		ResultSet rs = null;
 		try {
-			// Class.forName() may only bee needed with old JVMs, like JVM 14
-			// In that case, also remove throws ClassNotFoundException
+
 			Class.forName("com.mysql.cj.jdbc.Driver");
-//			conn = DriverManager.getConnection("jdbc:mysql://localhost/TicketExchange?user=root&password=root");
 			conn = MainDBConnection.getConnection();
 					
 			st = conn.createStatement();

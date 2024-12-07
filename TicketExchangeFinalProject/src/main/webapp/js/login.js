@@ -7,7 +7,7 @@ function validateLogin() {
 			if(this.status == 200) { // successful login validation
 				const userID = parseInt(this.responseText, 10);
 				localStorage.setItem('user_id', userID); 
-    			window.location.href = "entryPage.html"; //change into the homepage when it is uploaded
+    			window.location.href = "profile.html"; //change into the homepage when it is uploaded
 			} else { // unsuccessful validation
 				document.getElementById("loginFeedback").innerHTML = this.responseText;
 			}

@@ -5,7 +5,6 @@
 	<title>Register</title>
 	<link rel = "stylesheet" href = "css/register.css">
 	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-	<script src="js/register.js"></script>
 </head>
 <body>
     <div class = "bg"></div>
@@ -13,19 +12,21 @@
 	<div class = "auth-container">
 		<img id = "logo" src = "images/logo.PNG" alt = "Logo">
 		<h2>Create Account</h2>
-		<form id = "register-input"> 
+		<h3 id=registerFeedback></h3>
+		<form name = "registerform" id = "register-input" onsubmit="return validateRegister();"> 
 			<input type = "text" id = "fullname" placeholder = "Enter Full Name" required> 
 			<input type = "text" id = "username" placeholder = "Enter email or username" required> 
 			<input type = "text" id = "password" placeholder = "Enter password" required>
 			<input type = "text" id = "university" placeholder = "Enter University" required>
 			<input type = "text" id = "phone" placeholder = "Enter phone # (Optional)">
 			<input type = "text" id = "socials" placeholder = "Enter socials (Optional)">
-			<button type = "button" id = "submit" class = "submit-register">Create Account</button>
+			<button type="submit" id="submit" class="submit-register">Create Account</button> 
 		</form>
 	</div>
 	<div class = "links">
 		<a href = "login.html">Go to Login Page</a>
 	</div>
 	</div>
+	<script src="js/register.js"></script>
 </body>
 </html>
