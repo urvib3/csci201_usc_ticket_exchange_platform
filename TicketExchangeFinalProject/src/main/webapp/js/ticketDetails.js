@@ -13,7 +13,18 @@ fetch('db/tickets.json')
             document.getElementById('price').textContent = `$${ticket.ticketPrice}`;
             document.getElementById('date').textContent = `${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)}`;
             document.getElementById('details').textContent = `${ticket.additionalInfo}`;
-			document.getElementById('location').textContent = `${ticket.location || 'Not specified'}`;
+            document.getElementById('location').textContent = `${ticket.location || 'Not specified'}`;
+
+            // Prepare ticket details text for QR code
+            const qrText = `Event: ${ticket.eventName}\nDate: ${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)}\nLocation: ${ticket.location || 'Not specified'}\nPrice: $${ticket.ticketPrice}\nDetails: ${ticket.additionalInfo}`;
+
+            // Generate QR code
+            new QRCode(document.getElementById("qrcode"), {
+                text: qrText,
+                width: 128,
+                height: 128
+            });
+
             const negotiateButton = document.getElementById('negotiate-button');
             if (ticket.negotiable) {
                 negotiateButton.style.display = 'inline-block';

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticket Details</title>
     <link rel="stylesheet" href="css/ticketDetails.css">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script> <!-- Include QR Code library -->
 </head>
 <body>
     <div class="ticket-details-container">
@@ -16,7 +17,6 @@
         <div class="event-info">
             <h2 id="price" class="gradient-price"></h2>
             <p><strong>Date:</strong> <span id="date"></span></p>
-            
             <p><strong>Location:</strong> <span id="location"></span></p>
             <p><strong>Details:</strong> <span id="details"></span></p>
         </div>
@@ -24,6 +24,12 @@
         <div class="action-buttons">
             <button id="buy-button" class="button-primary">Buy Ticket</button>
             <button id="negotiate-button" class="button-secondary">Negotiate (Chat)</button>
+        </div>
+
+        <!-- QR Code Container -->
+        <div id="qr-container">
+            <p>Scan the QR code for ticket details:</p>
+            <div id="qrcode"></div>
         </div>
     </div>
 
