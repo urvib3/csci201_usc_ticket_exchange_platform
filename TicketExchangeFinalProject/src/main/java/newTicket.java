@@ -29,7 +29,9 @@ public class newTicket extends HttpServlet {
             String eventName = request.getParameter("eventName");
             int userID = Integer.parseInt(request.getParameter("userID"));
             int startDate = Integer.parseInt(request.getParameter("startDate"));
+            System.out.println("start date: " + startDate); 
             int endDate = Integer.parseInt(request.getParameter("endDate"));
+            System.out.println("end date: " + endDate); 
             float ticketPrice = Float.parseFloat(request.getParameter("ticketPrice"));
             String additionalInfo = request.getParameter("additionalInfo");
             boolean negotiable = request.getParameter("negotiable") != null; // Checkbox returns null if unchecked

@@ -12,7 +12,6 @@ function validateLogin() {
     var password = document.loginform.password.value;
     var hashedPassword = hash(password);
 		
-		
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "Login", true);
     xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
