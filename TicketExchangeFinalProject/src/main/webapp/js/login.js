@@ -1,12 +1,11 @@
 function validateLogin() {
 	
-	// Get the CAPTCHA response
+	// CAPTCHA
     var captchaResponse = grecaptcha.getResponse();
-    
-    // Check if CAPTCHA is completed
+ 
     if (captchaResponse.length === 0) {
         document.getElementById("loginFeedback").innerHTML = "Please complete the CAPTCHA.";
-        return false; // Prevent form submission if CAPTCHA is not completed
+        return false;
     }
 		
 		

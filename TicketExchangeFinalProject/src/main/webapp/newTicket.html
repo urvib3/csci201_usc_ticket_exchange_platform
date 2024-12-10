@@ -1,8 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>New ticket page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New ticket page</title>
+
+    <!-- Include Pikaday CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+
+    <!-- Include Pikaday JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/pikaday.min.js"></script>
 </head>
 <body>
     <h1>Submit Ticket Information</h1>
@@ -12,10 +19,10 @@
         <input type="text" id="eventName" name="eventName" required><br><br>
 
         <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" required><br><br>
+        <input type="text" id="startDate" name="startDate" required><br><br>
 
         <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" required><br><br>
+        <input type="text" id="endDate" name="endDate" required><br><br>
 
         <label for="ticketPrice">Ticket Price:</label>
         <input type="number" id="ticketPrice" name="ticketPrice" required><br><br>
@@ -33,51 +40,61 @@
     </form>
 
     <script>
-		document.querySelector("form").addEventListener("submit", async function (event) {
-		    event.preventDefault();
-		
-		    // Get Form Data
-		    const formData = new FormData(event.target);
-		    const data = Object.fromEntries(formData.entries());
-		    
-		    // Individually extract user id, dates, negotiable, status
-		   	const user_id = localStorage.getItem('user_id'); 
-		   	data.userID = user_id; 
-		   	
-		   	const startDate = parseInt(document.getElementById('startDate').value.replace(/-/g, '')) || 0;
-		    const endDate = parseInt(document.getElementById('endDate').value.replace(/-/g, '')) || Number.MAX_SAFE_INTEGER;
-		    data.startDate = startDate; 
-		    data.endDate = endDate; 
+        // Initialize Pikaday for the startDate and endDate inputs
+        const startDatePicker = new Pikaday({
+            field: document.getElementById('startDate'),
+            format: 'YYYY-MM-DD',  // Format for the date
+        });
 
-		    data.negotiable = formData.has("negotiable");
-		    
-		    data.status = "0";  // status is by default "available" with status code = 0
-		    
-		 	// Convert data to URL parameters
-		    const params = new URLSearchParams(data);
+        const endDatePicker = new Pikaday({
+            field: document.getElementById('endDate'),
+            format: 'YYYY-MM-DD',  // Format for the date
+        });
 
-		    // Send data as URL parameters in a GET request
-		    const url = `newTicket?${params.toString()}`;
-		    
-		
-		    try {
-		        const response = await fetch(url, {
-		            method: "GET",
-		        });
-		
-		        if (response.ok) {
-		            const result = await response.json();
-		            alert(result.message);
-		            window.location.href = "profile.html";
-		        } else {
-		            const error = await response.json();
-		            alert("Error: " + error.message);
-		        }
-		    } catch (error) {
-		        console.log("Error submitting ticket:", error);
-		        alert("An error occurred while submitting the ticket.");
-		    }
-		});
-	</script>
+        document.querySelector("form").addEventListener("submit", async function (event) {
+            event.preventDefault();
+        
+            // Get Form Data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Individually extract user id, dates, negotiable, status
+            const user_id = localStorage.getItem('user_id'); 
+            data.userID = user_id; 
+            
+            const startDate = parseInt(document.getElementById('startDate').value.replace(/-/g, '')) || 0;
+            const endDate = parseInt(document.getElementById('endDate').value.replace(/-/g, '')) || Number.MAX_SAFE_INTEGER;
+            data.startDate = startDate; 
+            data.endDate = endDate; 
+
+            data.negotiable = formData.has("negotiable");
+            
+            data.status = "0";  // status is by default "available" with status code = 0
+            
+            // Convert data to URL parameters
+            const params = new URLSearchParams(data);
+
+            // Send data as URL parameters in a GET request
+            const url = `newTicket?${params.toString()}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: "GET",
+                });
+        
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+                    window.location.href = "profile.html";
+                } else {
+                    const error = await response.json();
+                    alert("Error: " + error.message);
+                }
+            } catch (error) {
+                console.log("Error submitting ticket:", error);
+                alert("An error occurred while submitting the ticket.");
+            }
+        });
+    </script>
 </body>
 </html>
