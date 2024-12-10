@@ -1,147 +1,58 @@
 // Global variables
 let tickets = [];
-let currentResults = []; // Current search results for dynamic sorting
-let isMyListingsActive = false; // Track if "My Listings" is active
-let isMyInfoActive = false; // Track if "My Info" is active
+let currentResults = []; // Current displayed results
+let isMyListingsActive = false; 
+let isMyInfoActive = false;
+let isIncomingOffersActive = false;
+let isOutgoingOffersActive = false;
+let isFavoritesActive = false;
+let isPastOffersActive = false;
+
 const TEST_MODE = false; // Set to true for testing with local JSON
 
-// Fetch tickets for "My Listings" and toggle the "Sort By" dropdown
+document.addEventListener('DOMContentLoaded', () => {
+    const username = localStorage.getItem('username') || 'Guest';
+    const welcomeMessage = document.getElementById('welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.textContent = `${username}, welcome`;
+    }
+});
+
+// ====== Event Listeners ======
+
+// My Listings
 document.getElementById('mylistings-button').addEventListener('click', async () => {
-    const myListingsButton = document.getElementById('mylistings-button');
-    const sortByContainer = document.getElementById('sort-by-container');
-    const resultsContainer = document.getElementById('results');
-
-    // Deactivate "My Info" if active
-    if (isMyInfoActive) {
-        deactivateMyInfo();
-    }
-
-    // Toggle state
-    isMyListingsActive = !isMyListingsActive;
-
-    if (isMyListingsActive) {
-        // Activate "My Listings"
-        myListingsButton.style.backgroundColor = '#007bff'; // Active color
-        myListingsButton.style.color = '#fff';
-
-        try {
-            displayLoadingMessage();
-
-            if (TEST_MODE) {
-                // Fetch from mytickets.json for testing
-                const response = await fetch('db/mytickets.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                tickets = await response.json();
-            } else {
-                // Fetch from the servlet in production
-				const userId = localStorage.getItem('user_id');
-								if(!userId) {
-									document.getElementById('welcome-message').value = 'Error Authenticating'; 
-									return;
-								}
-                const response = await fetch('UserTicketListings?user_id=' + encodeURIComponent(userId));
-                if (!response.ok) {
-					const errorResponse = await response.json();  // Parse the response as JSON
-					throw new Error(errorResponse.message || `HTTP error! Status: ${response.status}`);
-                }
-                tickets = await response.json();
-            }
-
-            currentResults = [...tickets]; // Initialize current results
-
-            if (currentResults.length > 0) {
-                displayResults(currentResults); // Render tickets
-                sortByContainer.style.display = 'block'; // Show "Sort By"
-            } else {
-                resultsContainer.innerHTML = '<p>No tickets found.</p>';
-                sortByContainer.style.display = 'none'; // Hide "Sort By"
-            }
-			
-        } catch (error) {
-            console.error('Error fetching tickets:', error);
-            resultsContainer.innerHTML = `<p>${error.message}</p>`; // Display the specific error message
-            sortByContainer.style.display = 'none'; // Hide "Sort By"
-        }
-    } else {
-        // Deactivate "My Listings"
-        deactivateMyListings(myListingsButton, sortByContainer, resultsContainer);
-    }
+    toggleSection('mylistings');
 });
 
-// Handle "My Info" button
+// My Info
 document.getElementById('myinfo-button').addEventListener('click', async () => {
-    const myInfoButton = document.getElementById('myinfo-button');
-    const sortByContainer = document.getElementById('sort-by-container');
-    const resultsContainer = document.getElementById('results');
-    const myInfoContainer = document.getElementById('my-info-container');
-
-    // Deactivate "My Listings" if active
-    if (isMyListingsActive) {
-        deactivateMyListings(
-            document.getElementById('mylistings-button'),
-            sortByContainer,
-            resultsContainer
-        );
-    }
-
-    // Toggle state
-    isMyInfoActive = !isMyInfoActive;
-
-    if (isMyInfoActive) {
-        // Activate "My Info"
-        myInfoButton.style.backgroundColor = '#007bff'; // Active color
-        myInfoButton.style.color = '#fff';
-
-        try {
-            let userInfo;
-
-            if (TEST_MODE) {
-                // Fetch from myinfo.json for testing
-                const response = await fetch('db/myinfo.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                userInfo = await response.json();
-            } else {
-				const userId = localStorage.getItem('user_id');
-				if(!userId) {
-					document.getElementById('welcome-message').value = 'Error Authenticating'; 
-					return;
-				}
-                const response = await fetch('UserInfo?user_id=' + encodeURIComponent(userId));
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                userInfo = await response.json();
-            }
-
-            // Render user info
-            myInfoContainer.innerHTML = `
-                <div class="info">
-                    <p>Name: ${userInfo.fullname}</p>
-                    <p>Username: ${userInfo.username}</p>
-                    <p>University: ${userInfo.university}</p>
-                    <p>Phone Number: ${userInfo.phone}</p>
-                    <p>Socials: ${userInfo.socials}</p>
-                </div>
-            `;
-            myInfoContainer.style.display = 'block';
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-            myInfoContainer.innerHTML = '<p>Error fetching your information. Please try again later.</p>';
-        }
-    } else {
-        // Deactivate "My Info"
-        deactivateMyInfo();
-    }
+    toggleSection('myinfo');
 });
 
-//listener for "Sort By" dropdown
+// Incoming Offers
+document.getElementById('incoming-offers-button').addEventListener('click', async () => {
+    toggleSection('incoming-offers');
+});
+
+// Outgoing Offers
+document.getElementById('outgoing-offers-button').addEventListener('click', async () => {
+    toggleSection('outgoing-offers');
+});
+
+// Favorites
+document.getElementById('favorites-button').addEventListener('click', async () => {
+    toggleSection('favorites');
+});
+
+// Past Offers
+document.getElementById('past-offers-button').addEventListener('click', async () => {
+    toggleSection('past-offers');
+});
+
+// Sort By dropdown
 document.getElementById('sort-by').addEventListener('change', function () {
     const sortBy = this.value;
-
     currentResults = currentResults.sort((a, b) => {
         switch (sortBy) {
             case "price-asc":
@@ -149,9 +60,9 @@ document.getElementById('sort-by').addEventListener('change', function () {
             case "price-desc":
                 return b.ticketPrice - a.ticketPrice;
             case "date-asc":
-                return a.startDate - b.startDate;
+                return new Date(a.startDate) - new Date(b.startDate);
             case "date-desc":
-                return b.startDate - a.startDate;
+                return new Date(b.startDate) - new Date(a.startDate);
             case "popularity-asc":
                 return a.numTickets - b.numTickets;
             case "popularity-desc":
@@ -160,63 +71,392 @@ document.getElementById('sort-by').addEventListener('change', function () {
                 return 0;
         }
     });
-
-    displayResults(currentResults);
+    displayResults(currentResults, 'tickets');
 });
 
-// Helper function to deactivate "My Listings"
-function deactivateMyListings(myListingsButton, sortByContainer, resultsContainer) {
+// ====== Section Toggle Logic ======
+function toggleSection(section) {
+    // First deactivate all sections
+    deactivateAllSections();
+
+    switch(section) {
+        case 'mylistings':
+            isMyListingsActive = true;
+            activateButton('mylistings-button');
+            fetchMyListings();
+            break;
+
+        case 'myinfo':
+            isMyInfoActive = true;
+            activateButton('myinfo-button');
+            fetchMyInfo();
+            break;
+
+        case 'incoming-offers':
+            isIncomingOffersActive = true;
+            activateButton('incoming-offers-button');
+            fetchIncomingOffers();
+            break;
+
+        case 'outgoing-offers':
+            isOutgoingOffersActive = true;
+            activateButton('outgoing-offers-button');
+            fetchOutgoingOffers();
+            break;
+
+        case 'favorites':
+            isFavoritesActive = true;
+            activateButton('favorites-button');
+            fetchFavorites();
+            break;
+
+        case 'past-offers':
+            isPastOffersActive = true;
+            activateButton('past-offers-button');
+            fetchPastOffers();
+            break;
+    }
+}
+
+// Deactivate all sections
+function deactivateAllSections() {
     isMyListingsActive = false;
-    myListingsButton.style.backgroundColor = ''; // Reset button color
-    myListingsButton.style.color = ''; // Reset text color
-    resultsContainer.innerHTML = ''; // Clear results
-    sortByContainer.style.display = 'none'; // Hide "Sort By"
-	document.querySelector('.add-button-container').style.display = 'none';
-}
-
-// Helper function to deactivate "My Info"
-function deactivateMyInfo() {
-    const myInfoButton = document.getElementById('myinfo-button');
-    const myInfoContainer = document.getElementById('my-info-container');
-
     isMyInfoActive = false;
-    myInfoButton.style.backgroundColor = ''; // Reset button color
-    myInfoButton.style.color = ''; // Reset text color
-    myInfoContainer.innerHTML = ''; // Clear "My Info"
-    myInfoContainer.style.display = 'none'; // Hide "My Info"
+    isIncomingOffersActive = false;
+    isOutgoingOffersActive = false;
+    isFavoritesActive = false;
+    isPastOffersActive = false;
+
+    // Deactivate buttons
+    resetButton('mylistings-button');
+    resetButton('myinfo-button');
+    resetButton('incoming-offers-button');
+    resetButton('outgoing-offers-button');
+    resetButton('favorites-button');
+    resetButton('past-offers-button');
+
+    // Clear containers
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('my-info-container').innerHTML = '';
+    document.getElementById('my-info-container').style.display = 'none';
+    document.getElementById('sort-by-container').style.display = 'none';
+    document.getElementById('add-button-container').style.display = 'none';
 }
 
-// Display results in the UI
-function displayResults(results) {
-    const resultsContainer = document.getElementById('results');
-    resultsContainer.innerHTML = ''; // Clear previous results
+// Activate a button
+function activateButton(buttonId) {
+    const button = document.getElementById(buttonId);
+    if (button) {
+        button.style.backgroundColor = '#007bff'; 
+        button.style.color = '#fff';
+    }
+}
 
-    results.forEach(ticket => {
-        const ticketDiv = document.createElement('div');
-        ticketDiv.className = 'ticket-item';
+// Reset a button
+function resetButton(buttonId) {
+    const button = document.getElementById(buttonId);
+    if (button) {
+        button.style.backgroundColor = '';
+        button.style.color = '';
+    }
+}
+
+// ====== Fetching Data ======
+
+// Fetch My Listings
+async function fetchMyListings() {
+    const userId = localStorage.getItem('user_id');
+    if(!userId) {
+        document.getElementById('welcome-message').textContent = 'Error Authenticating';
+        return;
+    }
+
+    displayLoadingMessage();
+    try {
+        let response;
+        if (TEST_MODE) {
+            response = await fetch('db/mytickets.json');
+        } else {
+            response = await fetch('UserTicketListings?user_id=' + encodeURIComponent(userId));
+        }
+        if (!response.ok) {
+            const errorResponse = await response.json(); 
+            throw new Error(errorResponse.message || `HTTP error! Status: ${response.status}`);
+        }
+
+        tickets = await response.json();
+        currentResults = [...tickets];
+
+        if (currentResults.length > 0) {
+            displayResults(currentResults, 'tickets', true); // show edit buttons
+            document.getElementById('sort-by-container').style.display = 'block';
+            document.getElementById('add-button-container').style.display = 'block';
+        } else {
+            document.getElementById('results').innerHTML = '<p>No tickets found.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching tickets:', error);
+        document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+    }
+}
+
+// Fetch My Info
+async function fetchMyInfo() {
+    const userId = localStorage.getItem('user_id');
+    if(!userId) {
+        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        return;
+    }
+
+    try {
+        let response;
+        if (TEST_MODE) {
+            response = await fetch('db/myinfo.json');
+        } else {
+            response = await fetch('UserInfo?user_id=' + encodeURIComponent(userId));
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const userInfo = await response.json();
+
+        const myInfoContainer = document.getElementById('my-info-container');
+        myInfoContainer.innerHTML = `
+            <div class="info">
+                <p>Name: ${userInfo.fullname}</p>
+                <p>Username: ${userInfo.username}</p>
+                <p>University: ${userInfo.university}</p>
+                <p>Phone Number: ${userInfo.phone}</p>
+                <p>Socials: ${userInfo.socials}</p>
+            </div>
+        `;
+        myInfoContainer.style.display = 'block';
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        document.getElementById('my-info-container').innerHTML = '<p>Error fetching your information. Please try again later.</p>';
+    }
+}
+
+// Fetch Incoming Offers
+async function fetchIncomingOffers() {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        return;
+    }
+
+    displayLoadingMessage();
+    try {
+        let response;
+        if (TEST_MODE) {
+            response = await fetch('db/incomingOffers.json');
+        } else {
+            response = await fetch('UserIncomingOffers?user_id=' + encodeURIComponent(userId));
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const offers = await response.json();
+        currentResults = [...offers];
+
+        if (currentResults.length > 0) {
+            displayResults(currentResults, 'incoming');
+        } else {
+            document.getElementById('results').innerHTML = '<p>No incoming offers found.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching incoming offers:', error);
+        document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+    }
+}
+
+// Fetch Outgoing Offers
+async function fetchOutgoingOffers() {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        return;
+    }
+
+    displayLoadingMessage();
+    try {
+        let response;
+        if (TEST_MODE) {
+            response = await fetch('db/outgoingOffers.json');
+        } else {
+            response = await fetch('UserOutgoingOffers?user_id=' + encodeURIComponent(userId));
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const offers = await response.json();
+        currentResults = [...offers];
+
+        if (currentResults.length > 0) {
+            displayResults(currentResults, 'outgoing');
+        } else {
+            document.getElementById('results').innerHTML = '<p>No outgoing offers found.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching outgoing offers:', error);
+        document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+    }
+}
+
+// Fetch Favorites
+async function fetchFavorites() {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        return;
+    }
+
+    displayLoadingMessage();
+    try {
+        let response;
+        if (TEST_MODE) {
+            response = await fetch('db/favorites.json');
+        } else {
+            response = await fetch('UserFavorites?user_id=' + encodeURIComponent(userId));
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const favorites = await response.json();
+        currentResults = [...favorites];
+
+        if (currentResults.length > 0) {
+            displayResults(currentResults, 'favorites');
+        } else {
+            document.getElementById('results').innerHTML = '<p>No favorites found.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching favorites:', error);
+        document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+    }
+}
+
+// Fetch Past Offers
+async function fetchPastOffers() {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        return;
+    }
+
+    displayLoadingMessage();
+    try {
+        let response;
+        if (TEST_MODE) {
+            response = await fetch('db/pastOffers.json');
+        } else {
+            response = await fetch('UserPastOffers?user_id=' + encodeURIComponent(userId));
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const pastOffers = await response.json();
+        currentResults = [...pastOffers];
+
+        if (currentResults.length > 0) {
+            displayResults(currentResults, 'past');
+        } else {
+            document.getElementById('results').innerHTML = '<p>No past offers found.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching past offers:', error);
+        document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+    }
+}
+
+// ====== Display Results ======
+function displayResults(results, type, showEditButton = false) {
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = ''; 
+
+    results.forEach(item => {
+        // Create a container div
+        let itemDiv = document.createElement('div');
+        let linkClass = '';
+        let posterClass = '';
+        let linkHref = '#';
+
+        // Determine styling based on type
+        switch (type) {
+            case 'tickets':
+                itemDiv.className = 'ticket-item';
+                linkClass = 'ticket-link';
+                posterClass = 'ticket-poster';
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
+                break;
+            case 'incoming':
+            case 'outgoing':
+                itemDiv.className = 'offer-item';
+                linkClass = 'offer-link';
+                posterClass = 'offer-poster';
+                // For offers, you might link to a details page or a user profile
+                linkHref = `offerDetails.html?offerID=${item.offerID}`;
+                break;
+            case 'favorites':
+                itemDiv.className = 'favorite-item';
+                linkClass = 'favorite-link';
+                posterClass = 'favorite-poster';
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
+                break;
+            case 'past':
+                itemDiv.className = 'offer-item'; // reuse offer styling
+                linkClass = 'offer-link';
+                posterClass = 'offer-poster';
+                linkHref = `offerDetails.html?offerID=${item.offerID}`;
+                break;
+            default:
+                itemDiv.className = 'ticket-item';
+                linkClass = 'ticket-link';
+                posterClass = 'ticket-poster';
+        }
+
+        // Construct HTML based on data structure
+        // Adjust property names according to your actual data
+        let imageUrl = item.poster || 'images/sclogo.png';
+        let title = item.eventName || item.title || 'No Title';
+        let price = item.ticketPrice ? `$${item.ticketPrice}` : (item.offerPrice ? `$${item.offerPrice}` : '');
+        let date = item.startDate || item.date || '';
+        let details = item.additionalInfo || item.details || '';
 
         // Render ticket
-        ticketDiv.innerHTML = `
-		<a href="javascript:void(0);" class="ticket-link" onclick="editTicket(
-		        ${ticket.ticketID},
-		        '${ticket.eventName}',
-		        '${ticket.startDate}', 
-		        '${ticket.endDate}',
-		        ${ticket.ticketPrice},
-		        '${ticket.additionalInfo}',
-		        ${ticket.negotiable},
-		        ${ticket.numTickets},
-		        ${ticket.status}
-		    )">
-                <img src="${ticket.poster || 'images/sclogo.png'}" alt="${ticket.eventName}" class="ticket-poster">
-                <h3>${ticket.eventName}</h3>
-                <p>Price: $${ticket.ticketPrice}</p>
-                <p>Date: ${ticket.startDate}</p>
-                <p>Details: ${ticket.additionalInfo}</p>
-                <p>Negotiable: ${ticket.negotiable ? "Yes" : "No"}</p>
+        // Create inner HTML
+        const itemHTML = `
+            <a href="${linkHref}" class="${linkClass}">
+                <img src="${imageUrl}" alt="${title}" class="${posterClass}">
+                <div>
+                    <h3>${title}</h3>
+                    ${price ? `<p>Price: ${price}</p>` : ''}
+                    ${date ? `<p>Date: ${date}</p>` : ''}
+                    ${details ? `<p>Details: ${details}</p>` : ''}
+                </div>
             </a>
         `;
-        resultsContainer.appendChild(ticketDiv);
+
+        itemDiv.innerHTML = itemHTML;
+
+        // If showing My Listings and we want to edit
+        if (showEditButton && type === 'tickets') {
+            const editButton = document.createElement('button');
+            editButton.className = 'edit-button';
+            editButton.textContent = 'Edit';
+            editButton.onclick = () => {
+                // Redirect to edit page or open a modal
+                editTicket(item.ticketID, item.eventName, item.startDate, item.endDate, item.ticketPrice, item.additionalInfo, item.negotiable, item.numTickets, item.status);
+            };
+            itemDiv.appendChild(editButton);
+        }
+
+        resultsContainer.appendChild(itemDiv);
     });
 }
 

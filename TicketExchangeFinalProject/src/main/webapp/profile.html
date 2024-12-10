@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Profile</title>
-	<link rel = "stylesheet" href = "css/profile.css">
-	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-	 <!-- Container for buttons -->
+    <!-- Container for buttons -->
     <div class="top-right-buttons">
         <!-- Logout Button -->
         <button onclick="window.location.href='login.html'">Logout</button>
         <!-- Search Button -->
         <button onclick="window.location.href='search.html'">Search</button>
     </div>
-    
-	<div class = "bg"></div>
-	<div class = "profile">
-	<img id = "logo" src = "images/logo.PNG" alt = "Logo">
-	<h2 id="welcome-message"></h2>
-	
-	<div class = "buttons">
-        <button type = "button" id = "myinfo-button" ">My Info</button>
-		<button type = "button" id = "mylistings-button" ">My Listings</button>
-        <div id="sort-by-container" style="display: none;">
-            <label for="sort-by">Sort By:</label>
-            <select id="sort-by">
-                 <option value="date-asc">Date (Asc)</option>
-                 <option value="date-desc">Date (Desc)</option>
-                 <option value="price-asc">Price (Asc)</option>
-                 <option value="price-desc">Price (Desc)</option>
-                 <option value="popularity-asc">Popularity (Asc)</option>
-                 <option value="popularity-desc">Popularity (Desc)</option>
-            </select>
+
+    <div class="bg"></div>
+    <div class="profile">
+        <img id="logo" src="images/logo.PNG" alt="Logo">
+        <h2 id="welcome-message"></h2>
+
+        <div class="buttons">
+            <button type="button" id="myinfo-button">My Info</button>
+            <button type="button" id="mylistings-button">My Listings</button>
+            <button type="button" id="incoming-offers-button">Incoming Offers</button>
+            <button type="button" id="outgoing-offers-button">Outgoing Offers</button>
+            <button type="button" id="favorites-button">Favorites</button>
+            <button type="button" id="past-offers-button">Past Offers</button>
+
+            <div id="sort-by-container" style="display: none;">
+                <label for="sort-by">Sort By:</label>
+                <select id="sort-by">
+                    <option value="date-asc">Date (Asc)</option>
+                    <option value="date-desc">Date (Desc)</option>
+                    <option value="price-asc">Price (Asc)</option>
+                    <option value="price-desc">Price (Desc)</option>
+                    <option value="popularity-asc">Popularity (Asc)</option>
+                    <option value="popularity-desc">Popularity (Desc)</option>
+                </select>
+            </div>
         </div>
-	</div>
-	
-    <div id="my-info-container" style="display: none;"></div>
-    <div id="results">
-       <!-- Tickets will be dynamically loaded here -->
-   	</div>
-   	<!-- This is where the ticket results will be displayed -->
-	<div id="results">
-	    <!-- Tickets will be dynamically inserted here -->
-	</div>
-	
-	<!-- Add a button below the results container -->
-	<div class="add-button-container" id="add-button-container">
-	    <a href="newTicket.html">
-	        <button class="add-ticket-button" id="add-ticket-button">+</button>
-	    </a>
-	</div>
-   	
-	</div>
+
+        <div id="my-info-container" style="display: none;"></div>
+
+        <div id="results">
+            <!-- Dynamic content (tickets, offers, favorites) will appear here -->
+        </div>
+
+        <!-- Add ticket button (only shown for My Listings) -->
+        <div class="add-button-container" id="add-button-container">
+            <a href="newTicket.html">
+                <button class="add-ticket-button" id="add-ticket-button">+</button>
+            </a>
+        </div>
+    </div>
     <script src="js/profile.js"></script>
 </body>
 </html>
-
