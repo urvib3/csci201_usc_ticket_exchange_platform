@@ -51,11 +51,69 @@
 
         <!-- Add ticket button (only shown for My Listings) -->
         <div class="add-button-container" id="add-button-container">
-            <a href="newTicket.html">
-                <button class="add-ticket-button" id="add-ticket-button">+</button>
-            </a>
+        	<button class="add-ticket-button" id="add-ticket-button">+</button>
         </div>
     </div>
+    
+    <!-- Modal for New Ticket Form -->
+	<div id="newTicket-modal" class="modal">
+		<div class="modal-content">
+			<span class="close" id="close-modal">&times;</span>
+			<h1>Submit Ticket Information</h1>
+			<form id="ticketForm">
+				<label for="userID">User ID:</label>
+				<input type="number" id="userID" name="userID" required><br><br>
+				<label for="eventName">Event Name:</label>
+				<input type="text" id="eventName" name="eventName" required><br><br>
+				<label for="startDate">Start Date (Epoch):</label>
+				<input type="number" id="startDate" name="startDate" required><br><br>
+				<label for="endDate">End Date (Epoch):</label>
+				<input type="number" id="endDate" name="endDate" required><br><br>
+				<label for="ticketPrice">Ticket Price:</label>
+				<input type="number" id="ticketPrice" name="ticketPrice" required><br><br>
+				<label for="additionalInfo">Additional Info:</label>
+				<textarea id="additionalInfo" name="additionalInfo"></textarea><br><br>
+				<label for="negotiable">Negotiable:</label>
+				<input type="checkbox" id="negotiable" name="negotiable"><br><br>
+				<label for="numTickets">Number of Tickets:</label>
+				<input type="number" id="numTickets" name="numTickets" required><br><br>
+				<label for="status">Status:</label>
+				<input type="number" id="status" name="status" required><br><br>
+				<button type="submit" class = "submit">Submit</button>
+			</form>
+		</div>
+	</div>
+	
+	<!-- Modal for edit ticketing -->
+	<div id="update-ticket-modal" class="modal" style="display: none;">
+    	<span class="close" id="close-update-modal">&times;</span>
+    	<h1>Update Ticket Information</h1>
+    	<form id="ticketForm">
+        	<label for="eventName">Event Name</label>
+        	<input type="text" id="eventName" name="eventName" required><br><br>
+
+        	<label for="startDate">Start Date:</label>
+        	<input type="date" id="startDate" name="startDate" required><br><br>
+
+        	<label for="endDate">End Date:</label>
+        	<input type="date" id="endDate" name="endDate" required><br><br>
+
+        	<label for="ticketPrice">Ticket Price:</label>
+        	<input type="number" id="ticketPrice" name="ticketPrice" required><br><br>
+
+        	<label for="additionalInfo">Additional Info:</label>
+        	<textarea id="additionalInfo" name="additionalInfo"></textarea><br><br>
+
+        	<label for="negotiable">Negotiable:</label>
+        	<input type="checkbox" id="negotiable" name="negotiable"><br><br>
+
+        	<label for="numTickets">Number of Tickets:</label>
+        	<input type="number" id="numTickets" name="numTickets" required><br><br>
+
+        	<button type="button" id="delete-button" class = "submit">Delete</button>
+        	<button type="submit" class = "submit">Submit</button>
+    	</form>
+	</div>
     <script src="js/profile.js"></script>
 </body>
 </html>

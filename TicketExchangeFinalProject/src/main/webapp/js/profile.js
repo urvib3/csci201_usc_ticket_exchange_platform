@@ -479,6 +479,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (welcomeMessage) {
         welcomeMessage.textContent = `${username}, welcome`;
     }
+	document.getElementById('newTicket-modal').style.display = 'none';
+	document.getElementById('update-ticket-modal').style.display = 'block';
 });
 
 function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status) {
@@ -496,23 +498,145 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 
     // Store the ticket data in sessionStorage
     sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
+	document.getElementById('update-ticket-modal').style.display = 'block';
 	
 
-    // Redirect to the edit page
-    window.location.href = 'editTicket.html';
+	// Add delete functionality
+	document.getElementById('delete-button').addEventListener('click', async function() {
+		if (!confirm("Are you sure you want to delete this ticket?")) return;
+
+		const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
+		if (!ticketData || !ticketData.ticketID) {
+			alert("Ticket ID not found.");
+			return;
+		}
+
+		try {
+			const response = await fetch(`deleteTicket?ticketID=${ticketData.ticketID}`, {
+				method: "DELETE",
+			});
+
+			if (response.ok) {
+				const result = await response.json();
+				alert(result.message);
+				document.getElementById('update-ticket-modal').style.display = 'none'; // Close modal
+				location.reload(); // Refresh the page to update the UI
+			} else {
+				const error = await response.json();
+				alert("Error: " + error.message);
+			}
+		} catch (error) {
+			console.log("Error deleting ticket:", error);
+			alert("An error occurred while deleting the ticket.");
+		}
+	});
+
+	// Add submit functionality
+	document.querySelector("form").addEventListener("submit", async function(event) {
+		event.preventDefault();
+
+		const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
+		const formData = new FormData(event.target);
+		const data = Object.fromEntries(formData.entries());
+
+		data.ticketID = ticketData.ticketID;
+		data.startDate = parseInt(document.getElementById('startDate').value.replace(/-/g, '')) || 0;
+		data.endDate = parseInt(document.getElementById('endDate').value.replace(/-/g, '')) || Number.MAX_SAFE_INTEGER;
+		data.negotiable = formData.has("negotiable");
+
+		const params = new URLSearchParams(data);
+		const url = `editTicket?${params.toString()}`;
+
+		try {
+			const response = await fetch(url, { method: "GET" });
+
+			if (response.ok) {
+				const result = await response.json();
+				alert(result.message);
+				document.getElementById('update-ticket-modal').style.display = 'none'; // Close modal
+				location.reload(); // Refresh the page to reflect changes
+			} else {
+				const error = await response.json();
+				alert("Error: " + error.message);
+			}
+		} catch (error) {
+			console.log("Error submitting ticket:", error);
+			alert("An error occurred while submitting the ticket.");
+		}
+	});
 	
-	const ticketDataBack = JSON.parse(sessionStorage.getItem('ticketData'));
-	document.getElementById('welcome-message').textContent = `${ticketDataBack.startDate}, start date`;
+	// Populate the form fields and display the modal
+	    populateTicketForm(); 
 }
 
 function formatDate(dateStr) {
+	dateStr = String(dateStr);
 			
-			dateStr = String(dateStr);
-			
-		    // Ensure the dateStr is in 'YYYYMMDD' format
-		    if (dateStr && dateStr.length === 8) {
-		        // Format it to 'YYYY-MM-DD'
-		        return dateStr.slice(0, 4) + '-' + dateStr.slice(4, 6) + '-' + dateStr.slice(6, 8);
-		    }
-		    return ''; // Return an empty string if the date is not valid
+	// Ensure the dateStr is in 'YYYYMMDD' format
+	if (dateStr && dateStr.length === 8) {
+		// Format it to 'YYYY-MM-DD'
+		return dateStr.slice(0, 4) + '-' + dateStr.slice(4, 6) + '-' + dateStr.slice(6, 8);
+	}
+	return ''; // Return an empty string if the date is not valid
+}
+
+function populateTicketForm() {
+	// Retrieve ticketData from sessionStorage
+	const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
+
+	if (ticketData) {
+		// Populate form fields with the ticketData values
+		document.getElementById('eventName').value = ticketData.eventName || '';
+		document.getElementById('ticketPrice').value = ticketData.ticketPrice || '';
+		document.getElementById('startDate').value = formatDate(ticketData.startDate) || '';
+		document.getElementById('endDate').value = formatDate(ticketData.endDate) || '';
+		document.getElementById('additionalInfo').value = ticketData.additionalInfo || '';
+		document.getElementById('negotiable').checked = ticketData.negotiable || false;
+		document.getElementById('numTickets').value = ticketData.numTickets || '';
+	} else {
+		console.error("No ticket data found in sessionStorage.");
+	}
+}
+
+//close update-ticket-modal
+document.getElementById('close-update-modal').addEventListener("click", function() {
+	document.getElementById('update-ticket-modal').style.display = "none";
+})
+
+//open new ticket submission
+document.getElementById('add-ticket-button').addEventListener("click", function () {
+	document.getElementById('newTicket-modal').style.display = block;
+});
+//close new ticket submission
+document.getElementById("close-modal").addEventListener("click", function () {
+	document.getElementById("newTicket-modal").style.display = "none";
+});
+//submit new ticket
+document.querySelector("form").addEventListener("submit", async function (event) {
+	event.preventDefault();
+		
+	const formData = new FormData(event.target);
+	const data = Object.fromEntries(formData.entries());
+	data.negotiable = formData.has("negotiable");
+		
+	try {
+		const response = await fetch("/newTicket", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(data),
+		});
+		
+		if (response.ok) {
+			const result = await response.json();
+		    alert(result.message);
+		} else {
+		    const error = await response.json();
+		    alert("Error: " + error.message);
 		}
+	} catch (error) {
+		console.log("Error submitting ticket:", error);
+		alert("An error occurred while submitting the ticket.");
+	}
+});

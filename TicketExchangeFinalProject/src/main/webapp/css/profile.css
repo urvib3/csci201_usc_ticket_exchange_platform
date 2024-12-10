@@ -214,3 +214,52 @@ body, html {
     background-color: #218838;  
     transform: scale(1.1);  
 }
+
+.modal {
+	z-index: 9999;
+	position: fixed;
+	background: rgba(255, 225, 226, 0.9);
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	width: 50vw;
+	height: relative;
+	border: 3px solid #d70016;
+	border-radius: 6px;
+}
+.submit {
+	width: 25%;
+	padding: 10px;
+	margin-left: 5%;
+	margin-right: 5%;
+	background: #feb3a2;
+	color: #d70016;
+	border: 3px solid #d70016;
+	border-radius: 6px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.submit:hover {
+	background-color: #ff9999;
+	border-color: #ff0000;
+	color: #fff;
+}
+
+.close {
+	position: absolute;
+	top: 10px;
+	left: 20px;
+	font-size: 36px;
+	cursor: pointer;
+	color: #d70016;
+	font-weight: bold;
+}
+
+.close:hover {
+	color: red;
+	border: 2px solid black;
+}
