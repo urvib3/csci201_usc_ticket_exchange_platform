@@ -11,6 +11,9 @@ document.getElementById('mylistings-button').addEventListener('click', async () 
     const sortByContainer = document.getElementById('sort-by-container');
     const resultsContainer = document.getElementById('results');
     const myInfoContainer = document.getElementById('my-info-container');
+	
+	// Make add button visible
+	document.querySelector('.add-button-container').style.display = 'flex';
 
     // Deactivate "My Info" if active
     if (isMyInfoActive) {
@@ -59,6 +62,7 @@ document.getElementById('mylistings-button').addEventListener('click', async () 
                 resultsContainer.innerHTML = '<p>No tickets found.</p>';
                 sortByContainer.style.display = 'none'; // Hide "Sort By"
             }
+			
         } catch (error) {
             console.error('Error fetching tickets:', error);
             resultsContainer.innerHTML = `<p>${error.message}</p>`; // Display the specific error message
@@ -171,6 +175,7 @@ function deactivateMyListings(myListingsButton, sortByContainer, resultsContaine
     myListingsButton.style.color = ''; // Reset text color
     resultsContainer.innerHTML = ''; // Clear results
     sortByContainer.style.display = 'none'; // Hide "Sort By"
+	document.querySelector('.add-button-container').style.display = 'none';
 }
 
 // Helper function to deactivate "My Info"

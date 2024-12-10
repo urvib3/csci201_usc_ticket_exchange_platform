@@ -15,16 +15,22 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/newTicket")
 public class newTicket extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-
+        
+        System.out.println("Adding new ticket..."); 
+        
+        System.out.println("user id: " + request.getParameter("userID"));
+        System.out.println("user id: " + request.getParameter("eventName"));
+        
         try {
             // Retrieve form parameters
-            int userID = Integer.parseInt(request.getParameter("userID"));
             String eventName = request.getParameter("eventName");
+            int userID = Integer.parseInt(request.getParameter("userID"));
             int startDate = Integer.parseInt(request.getParameter("startDate"));
             int endDate = Integer.parseInt(request.getParameter("endDate"));
             float ticketPrice = Float.parseFloat(request.getParameter("ticketPrice"));
@@ -32,6 +38,7 @@ public class newTicket extends HttpServlet {
             boolean negotiable = request.getParameter("negotiable") != null; // Checkbox returns null if unchecked
             int numTickets = Integer.parseInt(request.getParameter("numTickets"));
             int status = Integer.parseInt(request.getParameter("status"));
+            
 
             Connection conn = MainDBConnection.getConnection();
             String sql = "INSERT INTO tickets (user_id, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status) "
@@ -60,8 +67,11 @@ public class newTicket extends HttpServlet {
 
             ps.close();
             conn.close();
+            
+            System.out.println("Successfully added new ticket"); 
 
         } catch (SQLException | NumberFormatException e) {
+        	e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             out.println("{\"message\": \"Error: " + e.getMessage() + "\"}");
         }

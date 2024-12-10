@@ -168,3 +168,33 @@ body, html {
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 }
 
+/* Style for the add button container */
+.add-button-container {
+    text-align: center;
+    margin-top: 20px;
+    display: none;
+}
+
+/* Style for the add new ticket button */
+.add-ticket-button {
+    font-size: 24px;  /* Larger font for better visibility */
+    width: 60px;  /* Set the width and height to make it a square */
+    height: 60px;
+    background-color: #28a745;  /* Green background */
+    color: white;
+    border: none;
+    border-radius: 12px;  /* Rounded corners */
+    display: flex;
+    justify-content: center;  /* Center the '+' sign horizontally */
+    align-items: center;  /* Center the '+' sign vertically */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;  /* Smooth transition for hover */
+    font-weight: bold;  /* Make the + bold */
+}
+
+/* Hover effect for the button */
+.add-ticket-button:hover {
+    background-color: #218838;  /* Darker green on hover */
+    transform: scale(1.1);  /* Slightly scale up the button for effect */
+}
+
