@@ -197,7 +197,17 @@ function displayResults(results) {
 
         // Render ticket
         ticketDiv.innerHTML = `
-            <a href="ticketDetails.html?ticketID=${ticket.ticketID}" class="ticket-link">
+		<a href="javascript:void(0);" class="ticket-link" onclick="editTicket(
+		        ${ticket.ticketID},
+		        '${ticket.eventName}',
+		        '${ticket.startDate}', 
+		        '${ticket.endDate}',
+		        ${ticket.ticketPrice},
+		        '${ticket.additionalInfo}',
+		        ${ticket.negotiable},
+		        ${ticket.numTickets},
+		        ${ticket.status}
+		    )">
                 <img src="${ticket.poster || 'images/sclogo.png'}" alt="${ticket.eventName}" class="ticket-poster">
                 <h3>${ticket.eventName}</h3>
                 <p>Price: $${ticket.ticketPrice}</p>
@@ -224,3 +234,23 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeMessage.textContent = `${username}, welcome`;
     }
 });
+
+function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status) {
+    const ticketData = {
+        ticketID,
+        eventName,
+        startDate,
+        endDate,
+        ticketPrice,
+        additionalInfo,
+        negotiable,
+        numTickets,
+        status
+    };
+
+    // Store the ticket data in sessionStorage
+    sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
+
+    // Redirect to the edit page
+    window.location.href = 'editTicket.html';
+}
