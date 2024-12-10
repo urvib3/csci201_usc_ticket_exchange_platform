@@ -221,7 +221,24 @@ function displayResults(results) {
                 buyButton.textContent = 'Buy';
                 buyButton.className = 'buy-button';
                 buyButton.addEventListener('click', () => {
-                    alert(`Buying ticket: ${ticket.eventName}`);
+					const ticketID = ticket.ticketID; // Assuming ticket object has ticketID
+					const userID = ticket.user_id;   // Assuming ticket object has user_id
+
+					const url = `BuyTicket?ticket_id=${ticketID}&user_id=${userID}`;
+
+					// Make the request (no need to handle the response)
+					fetch(url, {
+					    method: 'GET'  // Use GET or POST depending on your backend setup
+					})
+					.then(() => {
+					    // Handle the UI update or show a success message after the request
+					    alert(`Successfully purchased ticket: ${ticket.eventName}`);
+					})
+					.catch(error => {
+					    // Handle any errors (e.g., network issue)
+					    console.error('Error:', error);
+					    alert('There was an error processing your purchase. Please try again later.');
+					});
                 });
 
                 const negotiateButton = document.createElement('button');
@@ -238,7 +255,24 @@ function displayResults(results) {
                 buyButton.textContent = 'Buy';
                 buyButton.className = 'buy-button';
                 buyButton.addEventListener('click', () => {
-                    alert(`Buying ticket: ${ticket.eventName}`);
+					const ticketID = ticket.ticketID; // Assuming ticket object has ticketID
+					const userID = ticket.user_id;   // Assuming ticket object has user_id
+
+					const url = `BuyTicket?ticket_id=${ticketID}&user_id=${userID}`;
+
+					// Make the request (no need to handle the response)
+					fetch(url, {
+					    method: 'GET'  // Use GET or POST depending on your backend setup
+					})
+					.then(() => {
+					    // Handle the UI update or show a success message after the request
+					    alert(`Successfully purchased ticket: ${ticket.eventName}`);
+					})
+					.catch(error => {
+					    // Handle any errors (e.g., network issue)
+					    console.error('Error:', error);
+					    alert('There was an error processing your purchase. Please try again later.');
+					});
                 });
 
                 buttonContainer.appendChild(buyButton);
