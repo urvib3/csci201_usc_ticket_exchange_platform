@@ -132,4 +132,19 @@ body, html {
 	text-decoration: underline;
 }
 
+.captcha-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+#captcha-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #f3f3f3;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
 

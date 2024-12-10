@@ -3,25 +3,30 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Login</title>
-	<link rel = "stylesheet" href = "css/login.css">
+	<link rel="stylesheet" href="css/login.css">
 	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class = "bg"></div>
-	<div class = "auth-container">
-		<img id = "logo" src = "images/logo.PNG" alt = "Logo">
+	<div class="bg"></div>
+	<div class="auth-container">
+		<img id="logo" src="images/logo.PNG" alt="Logo">
 		<h2>Login</h2>
-		<h3 id=loginFeedback></h3>
+		<h3 id="loginFeedback"></h3>
 		<form name="loginform" id="login-input" onsubmit="return validateLogin();">
-			<input type = "text" id = "username" placeholder = "Enter Username" required>
-			<input type = "text" id = "password" placeholder = "Enter password" required>
+			<input type="text" id="username" placeholder="Enter Username" required>
+			<input type="password" id="password" placeholder="Enter Password" required>
+			
+			<!-- Add reCAPTCHA widget -->
+			<div class="g-recaptcha" data-sitekey="6Lc_DJgqAAAAAGspt14cJOT2mji1PDxLadT7WrOJ"></div>
+			
 			<input type="submit" id="submit" class="submit-login" value="Login"/>
-			<div class = "links">
-				<a href = "forgotPass.html">Forgot Password?</a>
-				<a href = "register.html">Create Account</a>  
+			<div class="links">
+				<a href="forgotPass.html">Forgot Password?</a>
+				<a href="register.html">Create Account</a>  
 			</div>
 		</form>
 	</div>
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	<script src="js/login.js"></script>
 </body>
 </html>

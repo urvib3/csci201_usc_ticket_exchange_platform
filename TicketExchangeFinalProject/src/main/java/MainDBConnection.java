@@ -3,7 +3,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MainDBConnection {	
-	static String DB_URL = "jdbc:mysql://localhost/TicketExchange?user=root&password=root";
+	static String DB_URL = "jdbc:mysql://localhost/TicketExchange?user=root&password=12345678";
 	
 	
 	public static Connection getConnection() throws SQLException {
