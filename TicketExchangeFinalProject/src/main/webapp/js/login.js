@@ -7,6 +7,10 @@ function validateLogin() {
         document.getElementById("loginFeedback").innerHTML = "Please complete the CAPTCHA.";
         return false;
     }
+	
+	// Hashing the password
+    var password = document.loginform.password.value;
+    var hashedPassword = hash(password);
 		
 		
     var xhttp = new XMLHttpRequest();
@@ -22,8 +26,16 @@ function validateLogin() {
 				document.getElementById("loginFeedback").innerHTML = this.responseText;
 			}
    }
-   xhttp.send("&username=" + document.loginform.username.value + "&password=" + document.loginform.password.value);
+   xhttp.send("&username=" + document.loginform.username.value + "&password=" + hashedPassword);
    return false; 
+ }
+ 
+ function hash(str) {
+     let hash = 0;
+     for (let i = 0; i < str.length; i++) {
+         hash = ((hash << 5) - hash) + str.charCodeAt(i); // Hashing function (based on bit shifting)
+     }
+     return hash.toString(16);
  }
  
  /* alternative js code 

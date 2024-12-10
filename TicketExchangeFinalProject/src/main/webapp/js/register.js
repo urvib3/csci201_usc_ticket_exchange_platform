@@ -1,6 +1,5 @@
 function validateRegister() {
 	
-
     const name = document.getElementById('fullname').value;
     const user = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
@@ -8,10 +7,13 @@ function validateRegister() {
     const phoneNum = document.getElementById('phone').value;
     const socials = document.getElementById('socials').value;
 
+	// Hashing the password before sending it
+	var hashedPassword = hash(pass);
+	
     const data = {
         name: name,
         username: user,
-        password: pass,
+        password: hashedPassword,
         university: uni,
         phone: phoneNum, 
         socials: socials
@@ -33,6 +35,14 @@ function validateRegister() {
 	}
 	xhttp.send(urlEncodedData);
 	return false;
+}
+
+function hash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    }
+    return hash.toString(16);
 }
 
 
