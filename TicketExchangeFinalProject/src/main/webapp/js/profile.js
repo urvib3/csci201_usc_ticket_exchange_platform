@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeMessage.textContent = `${username}, welcome`;
     }
 	document.getElementById('newTicket-modal').style.display = 'none';
-	document.getElementById('update-ticket-modal').style.display = 'block';
+	document.getElementById('update-ticket-modal').style.display = 'none';
 });
 
 function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status) {
