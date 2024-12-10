@@ -17,7 +17,9 @@ fetch('db/tickets.json')
 
             // Prepare ticket details text for QR code
             const qrText = `Event: ${ticket.eventName}\nDate: ${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)}\nLocation: ${ticket.location || 'Not specified'}\nPrice: $${ticket.ticketPrice}\nDetails: ${ticket.additionalInfo}`;
-
+			
+			console.log(qrText);
+			
             // Generate QR code
             new QRCode(document.getElementById("qrcode"), {
                 text: qrText,

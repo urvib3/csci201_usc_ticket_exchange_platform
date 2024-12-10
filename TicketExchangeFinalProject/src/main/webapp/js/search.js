@@ -222,9 +222,10 @@ function displayResults(results) {
                 buyButton.className = 'buy-button';
                 buyButton.addEventListener('click', () => {
 					const ticketID = ticket.ticketID; // Assuming ticket object has ticketID
-					const userID = ticket.user_id;   // Assuming ticket object has user_id
+					const sellerID = ticket.user_id;   // Assuming ticket object has user_id
+					const buyerID = localStorage.getItem('user_id'); 
 
-					const url = `BuyTicket?ticket_id=${ticketID}&user_id=${userID}`;
+					const url = `BuyTicket?ticketID=${ticketID}&sellerID=${sellerID}&buyerID=${buyerID}`;
 
 					// Make the request (no need to handle the response)
 					fetch(url, {
@@ -232,7 +233,7 @@ function displayResults(results) {
 					})
 					.then(() => {
 					    // Handle the UI update or show a success message after the request
-					    alert(`Successfully purchased ticket: ${ticket.eventName}`);
+					    alert(`Successfully requestd purchase: ${ticket.eventName}`);
 					})
 					.catch(error => {
 					    // Handle any errors (e.g., network issue)
@@ -256,9 +257,10 @@ function displayResults(results) {
                 buyButton.className = 'buy-button';
                 buyButton.addEventListener('click', () => {
 					const ticketID = ticket.ticketID; // Assuming ticket object has ticketID
-					const userID = ticket.user_id;   // Assuming ticket object has user_id
+					const sellerID = ticket.user_id;   // Assuming ticket object has user_id
+					const buyerID = localStorage.getItem('user_id'); 
 
-					const url = `BuyTicket?ticket_id=${ticketID}&user_id=${userID}`;
+					const url = `BuyTicket?ticketID=${ticketID}&sellerID=${sellerID}&buyerID=${buyerID}`;
 
 					// Make the request (no need to handle the response)
 					fetch(url, {
@@ -266,7 +268,7 @@ function displayResults(results) {
 					})
 					.then(() => {
 					    // Handle the UI update or show a success message after the request
-					    alert(`Successfully purchased ticket: ${ticket.eventName}`);
+					    alert(`Successfully requestd purchase: ${ticket.eventName}`);
 					})
 					.catch(error => {
 					    // Handle any errors (e.g., network issue)
