@@ -1,7 +1,7 @@
 // Global variables
 let tickets = [];
 let currentResults = []; // Current displayed results
-let isMyListingsActive = false; 
+let isMyListingsActive = false;
 let isMyInfoActive = false;
 let isIncomingOffersActive = false;
 let isOutgoingOffersActive = false;
@@ -79,7 +79,7 @@ function toggleSection(section) {
     // First deactivate all sections
     deactivateAllSections();
 
-    switch(section) {
+    switch (section) {
         case 'mylistings':
             isMyListingsActive = true;
             activateButton('mylistings-button');
@@ -147,7 +147,7 @@ function deactivateAllSections() {
 function activateButton(buttonId) {
     const button = document.getElementById(buttonId);
     if (button) {
-        button.style.backgroundColor = '#007bff'; 
+        button.style.backgroundColor = '#007bff';
         button.style.color = '#fff';
     }
 }
@@ -166,7 +166,7 @@ function resetButton(buttonId) {
 // Fetch My Listings
 async function fetchMyListings() {
     const userId = localStorage.getItem('user_id');
-    if(!userId) {
+    if (!userId) {
         document.getElementById('welcome-message').textContent = 'Error Authenticating';
         return;
     }
@@ -180,7 +180,7 @@ async function fetchMyListings() {
             response = await fetch('UserTicketListings?user_id=' + encodeURIComponent(userId));
         }
         if (!response.ok) {
-            const errorResponse = await response.json(); 
+            const errorResponse = await response.json();
             throw new Error(errorResponse.message || `HTTP error! Status: ${response.status}`);
         }
 
@@ -203,8 +203,8 @@ async function fetchMyListings() {
 // Fetch My Info
 async function fetchMyInfo() {
     const userId = localStorage.getItem('user_id');
-    if(!userId) {
-        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+    if (!userId) {
+        document.getElementById('welcome-message').textContent = 'Error Authenticating';
         return;
     }
 
@@ -242,7 +242,7 @@ async function fetchMyInfo() {
 async function fetchIncomingOffers() {
     const userId = localStorage.getItem('user_id');
     if (!userId) {
-        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        document.getElementById('welcome-message').textContent = 'Error Authenticating';
         return;
     }
 
@@ -276,7 +276,7 @@ async function fetchIncomingOffers() {
 async function fetchOutgoingOffers() {
     const userId = localStorage.getItem('user_id');
     if (!userId) {
-        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        document.getElementById('welcome-message').textContent = 'Error Authenticating';
         return;
     }
 
@@ -310,7 +310,7 @@ async function fetchOutgoingOffers() {
 async function fetchFavorites() {
     const userId = localStorage.getItem('user_id');
     if (!userId) {
-        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        document.getElementById('welcome-message').textContent = 'Error Authenticating';
         return;
     }
 
@@ -320,7 +320,7 @@ async function fetchFavorites() {
         if (TEST_MODE) {
             response = await fetch('db/favorites.json');
         } else {
-            response = await fetch('UserFavorites?user_id=' + encodeURIComponent(userId));
+            response = await fetch('Favorites?user_id=' + encodeURIComponent(userId));
         }
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -344,7 +344,7 @@ async function fetchFavorites() {
 async function fetchPastOffers() {
     const userId = localStorage.getItem('user_id');
     if (!userId) {
-        document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
+        document.getElementById('welcome-message').textContent = 'Error Authenticating';
         return;
     }
 
@@ -377,7 +377,7 @@ async function fetchPastOffers() {
 // ====== Display Results ======
 function displayResults(results, type, showEditButton = false) {
     const resultsContainer = document.getElementById('results');
-    resultsContainer.innerHTML = ''; 
+    resultsContainer.innerHTML = '';
 
     results.forEach(item => {
         // Create a container div
@@ -395,7 +395,7 @@ function displayResults(results, type, showEditButton = false) {
                 linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'incoming':
-				itemDiv.className = 'offer-item';
+                itemDiv.className = 'offer-item';
                 linkClass = 'incoming-link';
                 posterClass = 'incoming-poster';
                 // For offers, you might link to a details page or a user profile
@@ -479,8 +479,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (welcomeMessage) {
         welcomeMessage.textContent = `${username}, welcome`;
     }
-	document.getElementById('newTicket-modal').style.display = 'none';
-	document.getElementById('update-ticket-modal').style.display = 'none';
+    document.getElementById('newTicket-modal').style.display = 'none';
+    document.getElementById('update-ticket-modal').style.display = 'none';
 });
 
 function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status) {
@@ -498,145 +498,145 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 
     // Store the ticket data in sessionStorage
     sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
-	document.getElementById('update-ticket-modal').style.display = 'block';
-	
+    document.getElementById('update-ticket-modal').style.display = 'block';
 
-	// Add delete functionality
-	document.getElementById('delete-button').addEventListener('click', async function() {
-		if (!confirm("Are you sure you want to delete this ticket?")) return;
 
-		const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
-		if (!ticketData || !ticketData.ticketID) {
-			alert("Ticket ID not found.");
-			return;
-		}
+    // Add delete functionality
+    document.getElementById('delete-button').addEventListener('click', async function () {
+        if (!confirm("Are you sure you want to delete this ticket?")) return;
 
-		try {
-			const response = await fetch(`deleteTicket?ticketID=${ticketData.ticketID}`, {
-				method: "DELETE",
-			});
+        const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
+        if (!ticketData || !ticketData.ticketID) {
+            alert("Ticket ID not found.");
+            return;
+        }
 
-			if (response.ok) {
-				const result = await response.json();
-				alert(result.message);
-				document.getElementById('update-ticket-modal').style.display = 'none'; // Close modal
-				location.reload(); // Refresh the page to update the UI
-			} else {
-				const error = await response.json();
-				alert("Error: " + error.message);
-			}
-		} catch (error) {
-			console.log("Error deleting ticket:", error);
-			alert("An error occurred while deleting the ticket.");
-		}
-	});
+        try {
+            const response = await fetch(`deleteTicket?ticketID=${ticketData.ticketID}`, {
+                method: "DELETE",
+            });
 
-	// Add submit functionality
-	document.querySelector("form").addEventListener("submit", async function(event) {
-		event.preventDefault();
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message);
+                document.getElementById('update-ticket-modal').style.display = 'none'; // Close modal
+                location.reload(); // Refresh the page to update the UI
+            } else {
+                const error = await response.json();
+                alert("Error: " + error.message);
+            }
+        } catch (error) {
+            console.log("Error deleting ticket:", error);
+            alert("An error occurred while deleting the ticket.");
+        }
+    });
 
-		const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
-		const formData = new FormData(event.target);
-		const data = Object.fromEntries(formData.entries());
+    // Add submit functionality
+    document.querySelector("form").addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-		data.ticketID = ticketData.ticketID;
-		data.startDate = parseInt(document.getElementById('startDate').value.replace(/-/g, '')) || 0;
-		data.endDate = parseInt(document.getElementById('endDate').value.replace(/-/g, '')) || Number.MAX_SAFE_INTEGER;
-		data.negotiable = formData.has("negotiable");
+        const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
 
-		const params = new URLSearchParams(data);
-		const url = `editTicket?${params.toString()}`;
+        data.ticketID = ticketData.ticketID;
+        data.startDate = parseInt(document.getElementById('startDate').value.replace(/-/g, '')) || 0;
+        data.endDate = parseInt(document.getElementById('endDate').value.replace(/-/g, '')) || Number.MAX_SAFE_INTEGER;
+        data.negotiable = formData.has("negotiable");
 
-		try {
-			const response = await fetch(url, { method: "GET" });
+        const params = new URLSearchParams(data);
+        const url = `editTicket?${params.toString()}`;
 
-			if (response.ok) {
-				const result = await response.json();
-				alert(result.message);
-				document.getElementById('update-ticket-modal').style.display = 'none'; // Close modal
-				location.reload(); // Refresh the page to reflect changes
-			} else {
-				const error = await response.json();
-				alert("Error: " + error.message);
-			}
-		} catch (error) {
-			console.log("Error submitting ticket:", error);
-			alert("An error occurred while submitting the ticket.");
-		}
-	});
-	
-	// Populate the form fields and display the modal
-	    populateTicketForm(); 
+        try {
+            const response = await fetch(url, { method: "GET" });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message);
+                document.getElementById('update-ticket-modal').style.display = 'none'; // Close modal
+                location.reload(); // Refresh the page to reflect changes
+            } else {
+                const error = await response.json();
+                alert("Error: " + error.message);
+            }
+        } catch (error) {
+            console.log("Error submitting ticket:", error);
+            alert("An error occurred while submitting the ticket.");
+        }
+    });
+
+    // Populate the form fields and display the modal
+    populateTicketForm();
 }
 
 function formatDate(dateStr) {
-	dateStr = String(dateStr);
-			
-	// Ensure the dateStr is in 'YYYYMMDD' format
-	if (dateStr && dateStr.length === 8) {
-		// Format it to 'YYYY-MM-DD'
-		return dateStr.slice(0, 4) + '-' + dateStr.slice(4, 6) + '-' + dateStr.slice(6, 8);
-	}
-	return ''; // Return an empty string if the date is not valid
+    dateStr = String(dateStr);
+
+    // Ensure the dateStr is in 'YYYYMMDD' format
+    if (dateStr && dateStr.length === 8) {
+        // Format it to 'YYYY-MM-DD'
+        return dateStr.slice(0, 4) + '-' + dateStr.slice(4, 6) + '-' + dateStr.slice(6, 8);
+    }
+    return ''; // Return an empty string if the date is not valid
 }
 
 function populateTicketForm() {
-	// Retrieve ticketData from sessionStorage
-	const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
+    // Retrieve ticketData from sessionStorage
+    const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
 
-	if (ticketData) {
-		// Populate form fields with the ticketData values
-		document.getElementById('eventName').value = ticketData.eventName || '';
-		document.getElementById('ticketPrice').value = ticketData.ticketPrice || '';
-		document.getElementById('startDate').value = formatDate(ticketData.startDate) || '';
-		document.getElementById('endDate').value = formatDate(ticketData.endDate) || '';
-		document.getElementById('additionalInfo').value = ticketData.additionalInfo || '';
-		document.getElementById('negotiable').checked = ticketData.negotiable || false;
-		document.getElementById('numTickets').value = ticketData.numTickets || '';
-	} else {
-		console.error("No ticket data found in sessionStorage.");
-	}
+    if (ticketData) {
+        // Populate form fields with the ticketData values
+        document.getElementById('eventName').value = ticketData.eventName || '';
+        document.getElementById('ticketPrice').value = ticketData.ticketPrice || '';
+        document.getElementById('startDate').value = formatDate(ticketData.startDate) || '';
+        document.getElementById('endDate').value = formatDate(ticketData.endDate) || '';
+        document.getElementById('additionalInfo').value = ticketData.additionalInfo || '';
+        document.getElementById('negotiable').checked = ticketData.negotiable || false;
+        document.getElementById('numTickets').value = ticketData.numTickets || '';
+    } else {
+        console.error("No ticket data found in sessionStorage.");
+    }
 }
 
 //close update-ticket-modal
-document.getElementById('close-update-modal').addEventListener("click", function() {
-	document.getElementById('update-ticket-modal').style.display = "none";
+document.getElementById('close-update-modal').addEventListener("click", function () {
+    document.getElementById('update-ticket-modal').style.display = "none";
 })
 
 //open new ticket submission
 document.getElementById('add-ticket-button').addEventListener("click", function () {
-	document.getElementById('newTicket-modal').style.display = block;
+    document.getElementById('newTicket-modal').style.display = block;
 });
 //close new ticket submission
 document.getElementById("close-modal").addEventListener("click", function () {
-	document.getElementById("newTicket-modal").style.display = "none";
+    document.getElementById("newTicket-modal").style.display = "none";
 });
 //submit new ticket
 document.querySelector("form").addEventListener("submit", async function (event) {
-	event.preventDefault();
-		
-	const formData = new FormData(event.target);
-	const data = Object.fromEntries(formData.entries());
-	data.negotiable = formData.has("negotiable");
-		
-	try {
-		const response = await fetch("/newTicket", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		});
-		
-		if (response.ok) {
-			const result = await response.json();
-		    alert(result.message);
-		} else {
-		    const error = await response.json();
-		    alert("Error: " + error.message);
-		}
-	} catch (error) {
-		console.log("Error submitting ticket:", error);
-		alert("An error occurred while submitting the ticket.");
-	}
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+    data.negotiable = formData.has("negotiable");
+
+    try {
+        const response = await fetch("/newTicket", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert(result.message);
+        } else {
+            const error = await response.json();
+            alert("Error: " + error.message);
+        }
+    } catch (error) {
+        console.log("Error submitting ticket:", error);
+        alert("An error occurred while submitting the ticket.");
+    }
 });
