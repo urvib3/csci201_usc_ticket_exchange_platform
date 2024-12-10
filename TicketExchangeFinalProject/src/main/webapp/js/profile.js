@@ -431,7 +431,7 @@ function displayResults(results, type, showEditButton = false) {
         let imageUrl = item.poster || 'images/sclogo.png';
         let title = item.eventName || item.title || 'No Title';
         let price = item.ticketPrice ? `$${item.ticketPrice}` : (item.offerPrice ? `$${item.offerPrice}` : '');
-        let date = item.startDate || item.date || '';
+        let date = formatDate(item.startDate) || formatDate(item.date) || '';
         let details = item.additionalInfo || item.details || '';
 
         // Render ticket
@@ -496,7 +496,23 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 
     // Store the ticket data in sessionStorage
     sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
+	
 
     // Redirect to the edit page
     window.location.href = 'editTicket.html';
+	
+	const ticketDataBack = JSON.parse(sessionStorage.getItem('ticketData'));
+	document.getElementById('welcome-message').textContent = `${ticketDataBack.startDate}, start date`;
 }
+
+function formatDate(dateStr) {
+			
+			dateStr = String(dateStr);
+			
+		    // Ensure the dateStr is in 'YYYYMMDD' format
+		    if (dateStr && dateStr.length === 8) {
+		        // Format it to 'YYYY-MM-DD'
+		        return dateStr.slice(0, 4) + '-' + dateStr.slice(4, 6) + '-' + dateStr.slice(6, 8);
+		    }
+		    return ''; // Return an empty string if the date is not valid
+		}

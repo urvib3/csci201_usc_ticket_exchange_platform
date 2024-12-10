@@ -126,9 +126,9 @@
 		    if (ticketData) {
 		        // Populate form fields with the ticketData values
 		        document.getElementById('eventName').value = ticketData.eventName || '';
+		        document.getElementById('ticketPrice').value = ticketData.ticketPrice || '';
 		        document.getElementById('startDate').value = formatDate(ticketData.startDate) || '';
 		        document.getElementById('endDate').value = formatDate(ticketData.endDate) || '';
-		        document.getElementById('ticketPrice').value = ticketData.ticketPrice || '';
 		        document.getElementById('additionalInfo').value = ticketData.additionalInfo || '';
 		        document.getElementById('negotiable').checked = ticketData.negotiable || false;
 		        document.getElementById('numTickets').value = ticketData.numTickets || '';
@@ -138,6 +138,9 @@
 		}
 		
 		function formatDate(dateStr) {
+			
+			dateStr = String(dateStr);
+			
 		    // Ensure the dateStr is in 'YYYYMMDD' format
 		    if (dateStr && dateStr.length === 8) {
 		        // Format it to 'YYYY-MM-DD'
