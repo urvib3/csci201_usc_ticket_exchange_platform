@@ -31,3 +31,14 @@ CREATE TABLE tickets (
     status INT NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 )
+
+-- Create the offers table
+CREATE TABLE offers (
+    offer_id INT AUTO_INCREMENT PRIMARY KEY,  -- Automatically increments offer_id
+    buyer_id INT NOT NULL,                    -- Buyer ID (references users table)
+    seller_id INT NOT NULL,                   -- Seller ID (references users table)
+    ticket_id INT NOT NULL,                   -- Ticket ID (references Ticket table)
+    FOREIGN KEY (buyer_id) REFERENCES users(user_id) ON DELETE CASCADE,  -- References the 'users' table for buyer
+    FOREIGN KEY (seller_id) REFERENCES users(user_id) ON DELETE CASCADE, -- References the 'users' table for seller
+    FOREIGN KEY (ticket_id) REFERENCES Ticket(ticket_id) ON DELETE CASCADE -- References the 'Ticket' table
+);
