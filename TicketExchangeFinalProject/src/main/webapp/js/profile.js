@@ -532,7 +532,7 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 	});
 
 	// Add submit functionality
-	document.querySelector("form").addEventListener("submit", async function(event) {
+	document.querySelector("updateTicketForm").addEventListener("submit", async function(event) {
 		event.preventDefault();
 
 		const ticketData = JSON.parse(sessionStorage.getItem('ticketData'));
@@ -605,14 +605,14 @@ document.getElementById('close-update-modal').addEventListener("click", function
 
 //open new ticket submission
 document.getElementById('add-ticket-button').addEventListener("click", function () {
-	document.getElementById('newTicket-modal').style.display = block;
+	document.getElementById('newTicket-modal').style.display = 'block';
 });
 //close new ticket submission
 document.getElementById("close-modal").addEventListener("click", function () {
 	document.getElementById("newTicket-modal").style.display = "none";
 });
 //submit new ticket
-document.querySelector("form").addEventListener("submit", async function (event) {
+document.querySelector("newTicketForm").addEventListener("submit", async function (event) {
 	event.preventDefault();
 		
 	const formData = new FormData(event.target);
@@ -621,7 +621,7 @@ document.querySelector("form").addEventListener("submit", async function (event)
 		
 	try {
 		const response = await fetch("/newTicket", {
-			method: "POST",
+			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
 			},
