@@ -1,17 +1,20 @@
 let tickets = [];
 let currentResults = [];
 
-fetch('db/tickets.json')
-    .then(response => response.json())
-    .then(data => {
-        tickets = data;
-        console.log("Tickets loaded:", tickets);
-    })
-    .catch(error => {
-        console.error('Error loading tickets:', error);
-        document.getElementById('results').innerHTML = '<p>Unable to load tickets. Please try again later.</p>';
-    });
-	
+try {
+
+    response = await fetch('Search');
+    if (!response.ok) {
+        const errorResponse = await response.json(); 
+        throw new Error(errorResponse.message || `HTTP error! Status: ${response.status}`);
+    }
+
+    tickets = await response.json();
+} catch (error) {
+    console.error('Error fetching tickets:', error);
+    document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+}
+
 //listener for form submission
 document.getElementById('search-form').addEventListener('submit', function (event) {
     event.preventDefault();
