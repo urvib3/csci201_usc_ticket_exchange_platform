@@ -395,6 +395,12 @@ function displayResults(results, type, showEditButton = false) {
                 linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'incoming':
+				itemDiv.className = 'offer-item';
+                linkClass = 'incoming-link';
+                posterClass = 'incoming-poster';
+                // For offers, you might link to a details page or a user profile
+                linkHref = `incomingDetails.html?offerID=${item.offerID}`;
+                break;
             case 'outgoing':
                 itemDiv.className = 'offer-item';
                 linkClass = 'offer-link';

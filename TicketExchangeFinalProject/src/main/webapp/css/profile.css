@@ -40,7 +40,7 @@ body, html {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
     width: 50vw;
-    height: auto; /* Adjust to fit larger content */
+    height: 320px; /* Adjust to fit larger content */
 }
 
 .profile h2 {
@@ -49,9 +49,17 @@ body, html {
     color: #333;
 }
 
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* Creates 3 columns */
+    gap: 10px;  /* Adds space between buttons */
+    margin: 0 auto;  /* Centers the container */
+}
+
 .buttons {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     gap: 10px;
 }
