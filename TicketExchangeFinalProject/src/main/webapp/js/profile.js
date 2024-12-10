@@ -500,6 +500,9 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
     sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
 	document.getElementById('update-ticket-modal').style.display = 'block';
 	
+	window.location.href = 'editTicket.html';
+	/*
+	
 
 	// Add delete functionality
 	document.getElementById('delete-button').addEventListener('click', async function() {
@@ -567,6 +570,8 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 	
 	// Populate the form fields and display the modal
 	    populateTicketForm(); 
+		
+	*/
 }
 
 function formatDate(dateStr) {
@@ -605,7 +610,8 @@ document.getElementById('close-update-modal').addEventListener("click", function
 
 //open new ticket submission
 document.getElementById('add-ticket-button').addEventListener("click", function () {
-	document.getElementById('newTicket-modal').style.display = 'block';
+	window.location.href = 'newTicket.html';
+	// document.getElementById('newTicket-modal').style.display = 'block';
 });
 //close new ticket submission
 document.getElementById("close-modal").addEventListener("click", function () {

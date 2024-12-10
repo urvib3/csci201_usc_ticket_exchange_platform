@@ -28,7 +28,7 @@ function validateRegister() {
 	 xhttp.onload = function() {
 			
 			if(this.status == 200) { // successful login validation
-	 			window.location.href = "login.html"; //change into the homepage when it is uploaded
+	 			// window.location.href = "login.html"; //change into the homepage when it is uploaded
 			} else { // unsuccessful validation
 				document.getElementById("registerFeedback").innerHTML = this.responseText;
 			}
