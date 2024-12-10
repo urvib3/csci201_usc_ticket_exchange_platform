@@ -10,10 +10,6 @@ document.getElementById('mylistings-button').addEventListener('click', async () 
     const myListingsButton = document.getElementById('mylistings-button');
     const sortByContainer = document.getElementById('sort-by-container');
     const resultsContainer = document.getElementById('results');
-    const myInfoContainer = document.getElementById('my-info-container');
-	
-	// Make add button visible
-	document.querySelector('.add-button-container').style.display = 'flex';
 
     // Deactivate "My Info" if active
     if (isMyInfoActive) {
