@@ -1,7 +1,9 @@
 let tickets = [];
 let currentResults = [];
+const TEST_MODE = false;
 
-fetch('Search')  // Assuming 'Search' is the URL for the servlet
+if (TEST_MODE) { //local json
+	fetch('db/tickets.json')
     .then(response => response.json())
     .then(data => {
         tickets = data;
@@ -11,7 +13,18 @@ fetch('Search')  // Assuming 'Search' is the URL for the servlet
         console.error('Error loading tickets:', error);
         document.getElementById('results').innerHTML = '<p>Unable to load tickets. Please try again later.</p>';
     });
-
+}
+else {fetch('Search')
+    .then(response => response.json())
+    .then(data => {
+        tickets = data;
+        console.log("Tickets loaded:", tickets);
+    })
+    .catch(error => {
+        console.error('Error loading tickets:', error);
+        document.getElementById('results').innerHTML = '<p>Unable to load tickets. Please try again later.</p>';
+    });
+}
 
 //listener for form submission
 document.getElementById('search-form').addEventListener('submit', function (event) {
