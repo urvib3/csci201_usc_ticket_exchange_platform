@@ -1,7 +1,7 @@
 const urlParams = new URLSearchParams(window.location.search);
 const ticketID = urlParams.get('ticketID');
 
-fetch('db/tickets.json')
+fetch('Search')
     .then(response => response.json())
     .then(tickets => {
         const ticket = tickets.find(ticket => ticket.ticketID == ticketID);
