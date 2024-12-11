@@ -639,10 +639,11 @@ function acceptPurchase(item) {
 	    console.error('Error:', error);
 	    alert('An error occurred while processing your request.');
 	});
+}
 
 
 function rejectPurchase(item) {
-	console.log("rejecting purcahse");
+	console.log("rejecting purchase");
     // Parse the item string back to an object
     // const item = JSON.parse(itemString);
 
@@ -745,5 +746,6 @@ document.querySelector("newTicketForm").addEventListener("submit", async functio
 		alert("An error occurred while submitting the ticket.");
 	}
 });
+
 
 
