@@ -250,10 +250,19 @@ function displayResults(results) {
 					        // Handle the UI update or show a success message after the request
 					        alert(`Successfully requested purchase: ${ticket.eventName}`);
 					    } else {
-					        // Handle unsuccessful response
-					        alert('Failed to request purchase.');
+					        // Handle unsuccessful response and read the error message
+					        response.json()  // Parse the JSON response to get the error message
+					            .then(errorData => {
+					                // If the response contains a message, alert it
+					                alert(`Error: ${errorData.message || 'Failed to request purchase.'}`);
+					            })
+					            .catch(error => {
+					                // In case the error response does not contain a valid JSON message
+					                alert('Failed to parse error response.');
+					            });
 					    }
 					})
+
 					.catch(error => {
 					    // Handle any errors (e.g., network issue)
 					    console.error('Error:', error);
