@@ -399,14 +399,14 @@ function displayResults(results, type, showEditButton = false) {
                 linkClass = 'ticket-link';
                 posterClass = 'ticket-poster';
                 // For offers, you might link to a details page or a user profile
-                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'outgoing':
 				itemDiv.className = 'ticket-item';
                 linkClass = 'ticket-link';
                 posterClass = 'ticket-poster';
                 // For offers, you might link to a details page or a user profile
-                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'favorites':
 				itemDiv.className = 'ticket-item';
@@ -418,7 +418,7 @@ function displayResults(results, type, showEditButton = false) {
 				itemDiv.className = 'ticket-item';
                 linkClass = 'ticket-link';
                 posterClass = 'ticket-poster';
-                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             default:
                 itemDiv.className = 'ticket-item';
