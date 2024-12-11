@@ -8,7 +8,7 @@ let isOutgoingOffersActive = false;
 let isFavoritesActive = false;
 let isPastOffersActive = false;
 
-const TEST_MODE = true; // Set to true for testing with local JSON
+const TEST_MODE = false; // Set to true for testing with local JSON
 
 // ====== Event Listeners ======
 
@@ -83,6 +83,7 @@ function toggleSection(section) {
             isMyListingsActive = true;
             activateButton('mylistings-button');
             fetchMyListings();
+            document.getElementById('add-button-container').style.display = 'block';
             break;
 
         case 'myinfo':
@@ -101,6 +102,7 @@ function toggleSection(section) {
             isOutgoingOffersActive = true;
             activateButton('outgoing-offers-button');
             fetchOutgoingOffers();
+            document.getElementById('add-button-container').style.display = 'block';
             break;
 
         case 'favorites':
@@ -189,7 +191,6 @@ async function fetchMyListings() {
         if (currentResults.length > 0) {
             displayResults(currentResults, 'tickets', true); // show edit buttons
             document.getElementById('sort-by-container').style.display = 'block';
-            document.getElementById('add-button-container').style.display = 'block';
         } else {
             document.getElementById('results').innerHTML = '<p>No tickets found.</p>';
         }
@@ -348,29 +349,25 @@ async function fetchPastOffers() {
     }
 
     displayLoadingMessage();
-    try {
-        let response;
-        if (TEST_MODE) {
-            response = await fetch('db/pastOffers.json');
-        } else {
-            response = await fetch('UserPastOffers?user_id=' + encodeURIComponent(userId));
-        }
-        if (!response.ok) {
-            throw new Error(`No offer history currently`);
-        }
+	try {
+	    let response;
+	     response = await fetch('UserPastOffers?user_id=' + encodeURIComponent(userId));
+	    if (!response.ok) {
+	        throw new Error(`No past offers`);
+	    }
 
-        const pastOffers = await response.json();
-        currentResults = [...pastOffers];
+	    const offers = await response.json();
+	    currentResults = [...offers];
 
-        if (currentResults.length > 0) {
-            displayResults(currentResults, 'past');
-        } else {
-            document.getElementById('results').innerHTML = '<p>No past offers found.</p>';
-        }
-    } catch (error) {
-        console.error('Error fetching past offers:', error);
-        document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
-    }
+	    if (currentResults.length > 0) {
+	        displayResults(currentResults, 'past');
+	    } else {
+	        document.getElementById('results').innerHTML = '<p>No outgoing offers found.</p>';
+	    }
+	} catch (error) {
+	    console.error('Error fetching past offers:', error);
+	    document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+	}
 }
 
 // ====== Display Results ======
@@ -398,14 +395,14 @@ function displayResults(results, type, showEditButton = false) {
                 linkClass = 'ticket-link';
                 posterClass = 'ticket-poster';
                 // For offers, you might link to a details page or a user profile
-                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'outgoing':
 				itemDiv.className = 'ticket-item';
                 linkClass = 'ticket-link';
                 posterClass = 'ticket-poster';
                 // For offers, you might link to a details page or a user profile
-                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'favorites':
 				itemDiv.className = 'ticket-item';
@@ -417,7 +414,7 @@ function displayResults(results, type, showEditButton = false) {
 				itemDiv.className = 'ticket-item';
                 linkClass = 'ticket-link';
                 posterClass = 'ticket-poster';
-                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             default:
                 itemDiv.className = 'ticket-item';
@@ -427,25 +424,56 @@ function displayResults(results, type, showEditButton = false) {
 
         // Construct HTML based on data structure
         // Adjust property names according to your actual data
-        let imageUrl = item.poster || 'images/sclogo.png';
-        let title = item.eventName || item.title || 'No Title';
-        let price = item.ticketPrice ? `$${item.ticketPrice}` : (item.offerPrice ? `$${item.offerPrice}` : '');
-        let date = formatDate(item.startDate) || formatDate(item.date) || '';
-        let details = item.additionalInfo || item.details || '';
+		let imageUrl = item.poster || 'images/sclogo.png';
+		let title = item.eventName || item.title || 'No Title';
+		let price = item.ticketPrice ? `$${item.ticketPrice}` : (item.offerPrice ? `$${item.offerPrice}` : '');
+		let date = formatDate(item.startDate) || formatDate(item.date) || '';
+		let details = item.additionalInfo || item.details || '';
 
-        // Render ticket
-        // Create inner HTML
-        const itemHTML = `
-            <a href="${linkHref}" class="${linkClass}">
-                <img src="${imageUrl}" alt="${title}" class="${posterClass}">
-                <div>
-                    <h3>${title}</h3>
-                    ${price ? `<p>Price: ${price}</p>` : ''}
-                    ${date ? `<p>Date: ${date}</p>` : ''}
-                    ${details ? `<p>Details: ${details}</p>` : ''}
-                </div>
-            </a>
-        `;
+		let itemHTML = `
+		    <a href="${linkHref}" class="${linkClass}">
+		        <img src="${imageUrl}" alt="${title}" class="${posterClass}">
+		        <div>
+		            <h3>${title}</h3>
+		            ${price ? `<p>Price: ${price}</p>` : ''}
+		            ${date ? `<p>Date: ${date}</p>` : ''}
+		            ${details ? `<p>Details: ${details}</p>` : ''}
+		        </div>
+		`;
+
+			
+		console.log("type: " + type); 
+		if (type === 'incoming') {
+		    itemHTML += `
+		        <div class="buyer-info" style="margin-left: 100px; text-align: left; width: 250px;">
+		            <p><strong>Buyer Name:</strong> ${item.buyerUsername}</p>
+		            <p><strong>Phone:</strong> ${item.buyerPhone}</p>
+		            <p><strong>Socials:</strong> ${item.buyerSocials}</p>
+		        </div>
+				<div class="action-buttons" style="display: flex; justify-content: space-between; margin-top:50px;">
+						           <button class="accept-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; margin-right: 10px; background-color: green; color: white; border: none;">Accept</button>
+						           <button class="reject-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; background-color: red; color: white; border: none;">Reject</button>
+						       </div>
+		    `;
+		}
+		if (type === 'outgoing') {
+			    itemHTML += `
+			        <div class="status-info" style="margin-left: 100px; text-align: left; width: 250px; margin-top:50px;">
+			            <p><strong>Status:</strong>Pending</p>
+			        </div>
+			    `;
+		}
+		if (type === 'past') {
+					    itemHTML += `
+					        <div class="status-info" style="margin-left: 100px; text-align: left; width: 250px; margin-top:50px;">
+								<p><strong>Status:</strong> ${item.status}</p>
+					        </div>
+					    `;
+				}
+
+
+		itemHTML += '</a>';
+
 
         itemDiv.innerHTML = itemHTML;
 
@@ -462,6 +490,20 @@ function displayResults(results, type, showEditButton = false) {
         }
 
         resultsContainer.appendChild(itemDiv);
+		
+		if (type === 'incoming') {
+					itemDiv.querySelector('.accept-btn').addEventListener("click", function(event) {
+				        event.preventDefault();  // Prevent the anchor link's default behavior
+				        event.stopPropagation(); // Prevent the event from bubbling up to the link
+				        acceptPurchase(item);    // Call the accept purchase function
+				    });
+
+				    itemDiv.querySelector('.reject-btn').addEventListener("click", function(event) {
+				        event.preventDefault();  // Prevent the anchor link's default behavior
+				        event.stopPropagation(); // Prevent the event from bubbling up to the link
+				        rejectPurchase(item);    // Call the reject purchase function
+				    });
+				}
     });
 }
 
@@ -473,13 +515,13 @@ function displayLoadingMessage() {
 
 // Display username on page load
 document.addEventListener('DOMContentLoaded', () => {
-	const token = localStorage.getItem('user_id');
-	    if(!token) {
-	      // User not logged in
-	      window.location.href = "login.html";
-	      return;
-	    }
-	
+    const user_id = localStorage.getItem('user_id');
+    if(!user_id) {
+      // User not logged in
+      window.location.href = "login.html";
+      return;
+    }
+
     const username = localStorage.getItem('username') || 'Guest';
     const welcomeMessage = document.getElementById('welcome-message');
     if (welcomeMessage) {
@@ -504,7 +546,6 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 
     // Store the ticket data in sessionStorage
     sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
-	document.getElementById('update-ticket-modal').style.display = 'block';
 	
 	window.location.href = 'editTicket.html';
 	/*
@@ -580,6 +621,69 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 	*/
 }
 
+// Functions for approving or rejecting a buyer request 
+
+function acceptPurchase(item) {
+	console.log("accepting purchase"); 
+    // Parse the item string back to an object
+    // const item = JSON.parse(itemString);
+
+    // Extract the necessary parameters
+    const ticketID = item.ticketID;
+    const buyerID = item.buyerID;
+    const sellerID = item.sellerID;
+
+    // Prepare the URL for the servlet
+    const url = `HandlePurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}&status=1`;
+
+    // Make an HTTP GET request to the servlet
+	fetch(url, {
+	    method: 'GET',
+	})
+	.then(response => {
+	    if (response.ok) {
+	        alert('Purchase accepted successfully!');
+	    } else {
+	        alert('Failed to accept the purchase');
+	    }
+	})
+	.catch(error => {
+	    console.error('Error:', error);
+	    alert('An error occurred while processing your request.');
+	});
+}
+
+
+function rejectPurchase(item) {
+	console.log("rejecting purchase");
+    // Parse the item string back to an object
+    // const item = JSON.parse(itemString);
+
+    // Extract the necessary parameters
+    const ticketID = item.ticketID;
+    const buyerID = item.buyerID;
+    const sellerID = item.sellerID;
+
+    // Prepare the URL for the servlet
+    const url = `HandlePurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}&status=0`;
+
+    // Make an HTTP GET request to the servlet
+	fetch(url, {
+		    method: 'GET',
+		})
+		.then(response => {
+		    if (response.ok) {
+		        alert('Purchase rejected successfully!');
+		    } else {
+		        alert('Failed to reject the purchase');
+		    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		    alert('An error occurred while processing your request.');
+		});
+}
+
 function formatDate(dateStr) {
 	dateStr = String(dateStr);
 			
@@ -616,8 +720,8 @@ document.getElementById('close-update-modal').addEventListener("click", function
 
 //open new ticket submission
 document.getElementById('add-ticket-button').addEventListener("click", function () {
+	//document.getElementById('newTicket-modal').style.display = "block";
 	window.location.href = 'newTicket.html';
-	// document.getElementById('newTicket-modal').style.display = 'block';
 });
 //close new ticket submission
 document.getElementById("close-modal").addEventListener("click", function () {
@@ -652,3 +756,6 @@ document.querySelector("newTicketForm").addEventListener("submit", async functio
 		alert("An error occurred while submitting the ticket.");
 	}
 });
+
+
+

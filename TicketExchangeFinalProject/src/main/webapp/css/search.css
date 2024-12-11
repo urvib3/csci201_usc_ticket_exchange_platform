@@ -204,7 +204,7 @@ select:focus {
 }
 
 .buy-button,
-.negotiate-button {
+.favorite-button {
     background: #ff4d4d;
     color: white;
     border: none;
@@ -219,7 +219,7 @@ select:focus {
 }
 
 .buy-button:hover,
-.negotiate-button:hover {
+.favorite-button:hover {
     background: #d70016;
 }
 

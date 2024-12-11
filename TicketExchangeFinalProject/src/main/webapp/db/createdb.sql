@@ -42,3 +42,24 @@ CREATE TABLE offers (
     FOREIGN KEY (seller_id) REFERENCES users(user_id) ON DELETE CASCADE, -- References the 'users' table for seller
     FOREIGN KEY (ticket_id) REFERENCES Ticket(ticket_id) ON DELETE CASCADE -- References the 'Ticket' table
 );
+
+-- Create the past offers table
+CREATE TABLE pastoffers (
+    offer_id INT AUTO_INCREMENT PRIMARY KEY,  -- Automatically increments offer_id
+    buyer_id INT NOT NULL,                    -- Buyer ID (references users table)
+    seller_id INT NOT NULL,                   -- Seller ID (references users table)
+    ticket_id INT NOT NULL,                   -- Ticket ID (references Ticket table)
+    status VARCHAR(20) NOT NULL,              -- status: approved or rejected
+    FOREIGN KEY (buyer_id) REFERENCES users(user_id) ON DELETE CASCADE,  -- References the 'users' table for buyer
+    FOREIGN KEY (seller_id) REFERENCES users(user_id) ON DELETE CASCADE, -- References the 'users' table for seller
+    FOREIGN KEY (ticket_id) REFERENCES tickets(ticketID) ON DELETE CASCADE -- References the 'Ticket' table
+);
+
+-- Create the favorites table
+CREATE TABLE favorites (
+    favorite_id INT AUTO_INCREMENT PRIMARY KEY,  -- Automatically increments offer_id
+    user_id INT NOT NULL,                    -- Buyer ID (references users table)
+    ticket_id INT NOT NULL,                   -- Ticket ID (references Ticket table)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,  -- References the 'users' table for buyer
+    FOREIGN KEY (ticket_id) REFERENCES tickets(ticketID) ON DELETE CASCADE -- References the 'Ticket' table
+);

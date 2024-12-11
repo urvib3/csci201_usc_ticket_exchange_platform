@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-@WebServlet("/UserIncomingOffers")
-public class UserIncomingOffers extends HttpServlet {
+@WebServlet("/UserPastOffers")
+public class UserPastOffers extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,8 +51,8 @@ public class UserIncomingOffers extends HttpServlet {
         List<TicketOffer> ticketOffers = new ArrayList<>();
 
         // Modified SQL query to include t.user_id as sellerID
-        String sql = "SELECT o.ticket_id, o.buyer_id, t.eventName, t.startDate, t.endDate, t.ticketPrice, t.additionalInfo, t.negotiable, t.numTickets, t.status, t.user_id AS seller_id "
-                   + "FROM offers o "
+        String sql = "SELECT o.ticket_id, o.buyer_id, o.status, t.eventName, t.startDate, t.endDate, t.ticketPrice, t.additionalInfo, t.negotiable, t.numTickets, t.user_id AS seller_id "
+                   + "FROM pastoffers o "
                    + "JOIN tickets t ON o.ticket_id = t.ticketID "
                    + "WHERE o.seller_id = ?";
         try (Connection conn = MainDBConnection.getConnection();
@@ -70,7 +70,7 @@ public class UserIncomingOffers extends HttpServlet {
                     String additionalInfo = rs.getString("additionalInfo");
                     boolean negotiable = rs.getBoolean("negotiable");
                     int numTickets = rs.getInt("numTickets");
-                    int status = rs.getInt("status");
+                    String status = rs.getString("status");
                     int sellerId = rs.getInt("seller_id"); // Extracting seller_id from tickets table
 
                     // Get buyer's contact info
@@ -175,13 +175,13 @@ public class UserIncomingOffers extends HttpServlet {
         private String additionalInfo;
         private boolean negotiable;
         private int numTickets;
-        private int status;
+        private String status;
         private String buyerUsername;
         private String buyerPhone;
         private String buyerSocials;
 
         public TicketOffer(int ticketId, int buyerId, int sellerId, String eventName, int startDate, int endDate, double ticketPrice, String additionalInfo,
-                           boolean negotiable, int numTickets, int status, String buyerUsername, String buyerPhone, String buyerSocials) {
+                           boolean negotiable, int numTickets, String status, String buyerUsername, String buyerPhone, String buyerSocials) {
             this.ticketId = ticketId;
             this.buyerId = buyerId;
             this.sellerId = sellerId; // Initialize sellerId
@@ -230,7 +230,7 @@ public class UserIncomingOffers extends HttpServlet {
             return numTickets;
         }
 
-        public int getStatus() {
+        public String getStatus() {
             return status;
         }
 

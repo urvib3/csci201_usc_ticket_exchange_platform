@@ -52,7 +52,7 @@ public class Search extends HttpServlet {
     }
 	
 	private static String getAllTickets(Connection conn) {
-		String st = "SELECT * FROM tickets";
+		String st = "SELECT * FROM tickets WHERE status=0";
 		JsonArray jsonArray = new JsonArray();
 		try {
 			PreparedStatement pst = conn.prepareStatement(st);
