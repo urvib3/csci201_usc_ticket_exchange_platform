@@ -50,6 +50,13 @@ document.getElementById('past-offers-button').addEventListener('click', async ()
     toggleSection('past-offers');
 });
 
+// Logout Button
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('user_id');
+	localStorage.removeItem('username');
+    window.location.href = "login.html";
+});
+
 // Sort By dropdown
 document.getElementById('sort-by').addEventListener('change', function () {
     const sortBy = this.value;

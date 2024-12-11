@@ -316,3 +316,10 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeMessage.textContent = `${username}, your next ticket awaits`;
     }
 });
+
+// Logout Button
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('user_id');
+	localStorage.removeItem('username');
+    window.location.href = "login.html";
+});
