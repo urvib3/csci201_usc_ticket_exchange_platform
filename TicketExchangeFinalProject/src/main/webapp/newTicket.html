@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New ticket page</title>
+    
+    <link rel="stylesheet" href="css/ticket.css">
 
     <!-- Include Pikaday CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
@@ -12,8 +14,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/pikaday.min.js"></script>
 </head>
 <body>
-    <h1>Submit Ticket Information</h1>
-    <form id="ticketForm">
+    
+    <div class = "bg"></div>
+    <form id="ticketForm" class = "form">
+    
+    	<img id="logo" src="images/logo.PNG" alt="Logo">
+    
+    	<h2>Submit Ticket Information</h2>
     
         <label for="eventName">Event Name</label>
         <input type="text" id="eventName" name="eventName" required><br><br>
@@ -36,7 +43,7 @@
         <label for="numTickets">Number of Tickets:</label>
         <input type="number" id="numTickets" name="numTickets" required><br><br>
 
-        <button type="submit">Submit</button>
+        <button type="submit" class = "submit">Submit</button>
     </form>
 
     <script>

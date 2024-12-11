@@ -610,8 +610,8 @@ document.getElementById('close-update-modal').addEventListener("click", function
 
 //open new ticket submission
 document.getElementById('add-ticket-button').addEventListener("click", function () {
+	//document.getElementById('newTicket-modal').style.display = "block";
 	window.location.href = 'newTicket.html';
-	// document.getElementById('newTicket-modal').style.display = 'block';
 });
 //close new ticket submission
 document.getElementById("close-modal").addEventListener("click", function () {
