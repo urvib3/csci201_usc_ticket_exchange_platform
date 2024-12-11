@@ -228,8 +228,9 @@ function displayResults(results) {
 
             const buttonContainer = document.createElement('div');
             buttonContainer.className = 'button-container';
-
-            if (ticket.negotiable) {
+	
+            // if (ticket.negotiable) {
+			if(true) {
                 const buyButton = document.createElement('button');
                 buyButton.textContent = 'Buy';
                 buyButton.className = 'buy-button';
@@ -241,7 +242,6 @@ function displayResults(results) {
 					const url = `BuyTicket?ticketID=${ticketID}&sellerID=${sellerID}&buyerID=${buyerID}`;
 
 					// Make the request (no need to handle the response)
-					// Make the request (no need to handle the response)
 					fetch(url, {
 					    method: 'GET'  // Use GET or POST depending on your backend setup
 					})
@@ -250,13 +250,8 @@ function displayResults(results) {
 					        // Handle the UI update or show a success message after the request
 					        alert(`Successfully requested purchase: ${ticket.eventName}`);
 					    } else {
-					        // Parse the error response and display the message
-					        response.json().then(errorData => {
-					            alert(`Error: ${errorData.message || 'Something went wrong. Please try again later.'}`);
-					        }).catch(error => {
-					            console.error('Error parsing the error response:', error);
-					            alert('An unexpected error occurred.');
-					        });
+					        // Handle unsuccessful response
+					        alert('Failed to request purchase.');
 					    }
 					})
 					.catch(error => {
@@ -265,19 +260,43 @@ function displayResults(results) {
 					    alert('There was an error processing your purchase. Please try again later.');
 					});
 
-
                 });
 
-                const negotiateButton = document.createElement('button');
-                negotiateButton.textContent = 'Negotiate (Chat)';
-                negotiateButton.className = 'negotiate-button';
-                negotiateButton.addEventListener('click', () => {
-                    alert(`Starting negotiation for: ${ticket.eventName}`);
-                });
+				// add favorite button
+				const favoriteButton = document.createElement('button');
+				favoriteButton.className = 'favorite-button';
+
+				// Create heart icon (using Unicode for heart)
+				favoriteButton.innerHTML = '&#9825;'; // Empty heart
+				const userID = localStorage.getItem('user_id');
+				
+				isFavoriteTicket(ticket.ticketID, userID, favoriteButton);  
+				
+					
+
+				favoriteButton.addEventListener('click', () => {
+				    const isFavorited = favoriteButton.classList.contains('favorited');
+
+				    if (isFavorited) {
+				        // If already favorited, remove favorite
+				        favoriteButton.innerHTML = '&#9825;'; // Empty heart
+				        favoriteButton.classList.remove('favorited');
+						// Call favoriteTicket function with ticketID and user_id
+						deleteFavoriteTicket(ticket.ticketID, userID);
+				    } else {
+				        // If not favorited, mark as favorited
+				        favoriteButton.innerHTML = '&#9829;'; // Filled heart
+				        favoriteButton.classList.add('favorited');
+
+				        // Call favoriteTicket function with ticketID and user_id
+				        addFavoriteTicket(ticket.ticketID, userID);
+				    }
+				});
+
 
                 buttonContainer.appendChild(buyButton);
-                buttonContainer.appendChild(negotiateButton);
-            } else {
+                buttonContainer.appendChild(favoriteButton);
+            } /*else {
                 const buyButton = document.createElement('button');
                 buyButton.textContent = 'Buy';
                 buyButton.className = 'buy-button';
@@ -313,7 +332,7 @@ function displayResults(results) {
                 });
 
                 buttonContainer.appendChild(buyButton);
-            }
+            }*/
 
             ticketDiv.appendChild(buttonContainer);
 
@@ -345,3 +364,77 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 	localStorage.removeItem('username');
     window.location.href = "login.html";
 });
+
+function addFavoriteTicket(ticketID, userID) {
+    // Construct the URL with query parameters
+    const url = `AddFavoriteTicket?userID=${userID}&ticketID=${ticketID}`;
+
+    // Make the GET request to the AddFavoriteTicket servlet
+    fetch(url, {
+        method: 'GET',  // Assuming the servlet uses GET method
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json(); // Parse the response body if the request is successful
+        } else {
+            throw new Error('Failed to add ticket to favorites.');
+        }
+    })
+    .catch(error => {
+        console.error('Error adding favorite ticket:', error);
+        alert('An error occurred while adding the ticket to favorites.');
+    });
+}
+
+function deleteFavoriteTicket(ticketID, userID) {
+    // Construct the URL with query parameters
+    const url = `DeleteFavoriteTicket?userID=${userID}&ticketID=${ticketID}`;
+
+    // Make the GET request to the DeleteFavoriteTicket servlet
+    fetch(url, {
+        method: 'GET',  // Assuming the servlet uses GET method
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json(); // Parse the response body if the request is successful
+        } else {
+            throw new Error('Failed to remove ticket from favorites.');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting favorite ticket:', error);
+        alert('An error occurred while removing the ticket from favorites.');
+    });
+}
+
+async function isFavoriteTicket(ticketID, userID, favoriteButton) {
+    // Construct the URL with query parameters
+    const url = `CheckIfFavoriteTicket?userID=${userID}&ticketID=${ticketID}`;
+
+    try {
+        // Make the GET request and await the response
+        const response = await fetch(url, {
+            method: 'GET',  // Assuming the servlet uses GET method
+        });
+
+        if (response.ok) {
+            const data = await response.json();  // Await the JSON data
+			
+			if((data.isFavorite === true || data.isFavorite === 'true') && favoriteButton) {
+				favoriteButton.innerHTML = '&#9829;'; // Filled heart
+				favoriteButton.classList.add('favorited');
+			}
+
+            // Return the parsed result (true or false)
+            return String(data.isFavorite) === 'true'; // Assuming `isFavorite` is a string 'true' or 'false'
+        } else {
+			console.error("The servlet failed to properly check if the ticket is a fav");
+            throw new Error('Failed to check if the ticket is a favorite.');
+        }
+    } catch (error) {
+        console.error('Error checking favorite ticket:', error);
+        alert('An error occurred while checking the ticket as a favorite:', error);
+        return false; // Return false in case of error
+    }
+}
+
