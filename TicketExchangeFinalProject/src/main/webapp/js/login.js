@@ -18,7 +18,8 @@ function validateLogin() {
     xhttp.onload = function() {
 			
 			if(this.status == 200) { // successful login validation
-				const userID = parseInt(this.responseText, 10);
+				const userID = parseInt(this.responseText, 10); 
+				localStorage.setItem('username',document.loginform.username.value)
 				localStorage.setItem('user_id', userID); 
     			window.location.href = "profile.html"; //change into the homepage when it is uploaded
 			} else { // unsuccessful validation

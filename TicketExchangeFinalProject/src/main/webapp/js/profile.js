@@ -10,14 +10,6 @@ let isPastOffersActive = false;
 
 const TEST_MODE = true; // Set to true for testing with local JSON
 
-document.addEventListener('DOMContentLoaded', () => {
-    const username = localStorage.getItem('username') || 'Guest';
-    const welcomeMessage = document.getElementById('welcome-message');
-    if (welcomeMessage) {
-        welcomeMessage.textContent = `${username}, welcome`;
-    }
-});
-
 // ====== Event Listeners ======
 
 // My Listings
@@ -48,6 +40,13 @@ document.getElementById('favorites-button').addEventListener('click', async () =
 // Past Offers
 document.getElementById('past-offers-button').addEventListener('click', async () => {
     toggleSection('past-offers');
+});
+
+// Logout Button
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('user_id');
+	localStorage.removeItem('username');
+    window.location.href = "login.html";
 });
 
 // Sort By dropdown
@@ -474,6 +473,13 @@ function displayLoadingMessage() {
 
 // Display username on page load
 document.addEventListener('DOMContentLoaded', () => {
+	const token = localStorage.getItem('user_id');
+	    if(!token) {
+	      // User not logged in
+	      window.location.href = "login.html";
+	      return;
+	    }
+	
     const username = localStorage.getItem('username') || 'Guest';
     const welcomeMessage = document.getElementById('welcome-message');
     if (welcomeMessage) {
