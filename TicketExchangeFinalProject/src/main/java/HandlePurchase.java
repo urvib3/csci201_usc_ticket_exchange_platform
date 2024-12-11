@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/AcceptPurchase")
-public class AcceptPurchase extends HttpServlet {
+@WebServlet("/HandlePurchase")
+public class HandlePurchase extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,6 +26,7 @@ public class AcceptPurchase extends HttpServlet {
             int ticketID = Integer.parseInt(request.getParameter("ticketID"));
             int buyerID = Integer.parseInt(request.getParameter("buyerID"));
             int sellerID = Integer.parseInt(request.getParameter("sellerID"));
+            int status = Integer.parseInt(request.getParameter("status"));
             
             System.out.println("ticketID: " + ticketID + " buyerID: " + buyerID + " sellerID: " + sellerID); 
 
@@ -47,20 +48,23 @@ public class AcceptPurchase extends HttpServlet {
                 out.println("{\"message\": \"No matching offer found to accept.\"}");
                 return;
             }
+             
+            if(status == 1) { // no need to update if it was rejected
+	            // Update the ticket status to 1 (e.g., "Sold" or "Purchased") if accepted
+	            String updateTicketStatusSQL = "UPDATE tickets SET status = 1 WHERE ticketID = ?";
+	            PreparedStatement psUpdateTicketStatus = conn.prepareStatement(updateTicketStatusSQL);
+	            psUpdateTicketStatus.setInt(1, ticketID);
+	
+	            rowsAffected = psUpdateTicketStatus.executeUpdate();
+	
+	
+	            // If no ticket was found, send a conflict status
+	            if (rowsAffected == 0) {
+	                response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found
+	                out.println("{\"message\": \"No matching ticket found.\"}");
+	                return;
+	            }
             
-            // Update the ticket status to 1 (e.g., "Sold" or "Purchased")
-            String updateTicketStatusSQL = "UPDATE tickets SET status = 1 WHERE ticketID = ?";
-            PreparedStatement psUpdateTicketStatus = conn.prepareStatement(updateTicketStatusSQL);
-            psUpdateTicketStatus.setInt(1, ticketID);
-
-            rowsAffected = psUpdateTicketStatus.executeUpdate();
-
-
-            // If no ticket was found, send a conflict status
-            if (rowsAffected == 0) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found
-                out.println("{\"message\": \"No matching ticket found.\"}");
-                return;
             }
 
 
@@ -70,7 +74,7 @@ public class AcceptPurchase extends HttpServlet {
             psInsert.setInt(1, ticketID);
             psInsert.setInt(2, buyerID);
             psInsert.setInt(3, sellerID);
-            psInsert.setString(4, "approved"); // Status as "approved"
+            psInsert.setString(4, (status == 0) ? "rejected" : "approved"); // Status as "approved"
 
             int insertRowsAffected = psInsert.executeUpdate();
 

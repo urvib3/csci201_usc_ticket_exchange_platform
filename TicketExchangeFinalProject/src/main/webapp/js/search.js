@@ -241,18 +241,31 @@ function displayResults(results) {
 					const url = `BuyTicket?ticketID=${ticketID}&sellerID=${sellerID}&buyerID=${buyerID}`;
 
 					// Make the request (no need to handle the response)
+					// Make the request (no need to handle the response)
 					fetch(url, {
 					    method: 'GET'  // Use GET or POST depending on your backend setup
 					})
-					.then(() => {
-					    // Handle the UI update or show a success message after the request
-					    alert(`Successfully requestd purchase: ${ticket.eventName}`);
+					.then(response => {
+					    if (response.ok) {
+					        // Handle the UI update or show a success message after the request
+					        alert(`Successfully requested purchase: ${ticket.eventName}`);
+					    } else {
+					        // Parse the error response and display the message
+					        response.json().then(errorData => {
+					            alert(`Error: ${errorData.message || 'Something went wrong. Please try again later.'}`);
+					        }).catch(error => {
+					            console.error('Error parsing the error response:', error);
+					            alert('An unexpected error occurred.');
+					        });
+					    }
 					})
 					.catch(error => {
 					    // Handle any errors (e.g., network issue)
 					    console.error('Error:', error);
 					    alert('There was an error processing your purchase. Please try again later.');
 					});
+
+
                 });
 
                 const negotiateButton = document.createElement('button');

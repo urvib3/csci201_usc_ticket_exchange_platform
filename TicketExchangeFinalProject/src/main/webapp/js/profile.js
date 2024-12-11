@@ -622,7 +622,7 @@ function acceptPurchase(item) {
     const sellerID = item.sellerID;
 
     // Prepare the URL for the servlet
-    const url = `AcceptPurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}`;
+    const url = `HandlePurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}&status=1`;
 
     // Make an HTTP GET request to the servlet
 	fetch(url, {
@@ -653,25 +653,23 @@ function rejectPurchase(item) {
     const sellerID = item.sellerID;
 
     // Prepare the URL for the servlet
-    const url = `RejectPurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}`;
+    const url = `HandlePurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}&status=0`;
 
     // Make an HTTP GET request to the servlet
-    fetch(url, {
-        method: 'GET',
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Handle the response from the servlet (optional)
-        if (data.message === "Success") {
-            alert('Purchase deleted successfully!');
-        } else {
-            alert('Failed to delete the purchase');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while processing your request.');
-    });
+	fetch(url, {
+		    method: 'GET',
+		})
+		.then(response => {
+		    if (response.ok) {
+		        alert('Purchase rejected successfully!');
+		    } else {
+		        alert('Failed to reject the purchase');
+		    }
+		})
+		.catch(error => {
+		    console.error('Error:', error);
+		    alert('An error occurred while processing your request.');
+		});
 }
 
 function formatDate(dateStr) {
