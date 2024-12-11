@@ -255,7 +255,7 @@ async function fetchIncomingOffers() {
             response = await fetch('UserIncomingOffers?user_id=' + encodeURIComponent(userId));
         }
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`No incoming offers`);
         }
 
         const offers = await response.json();
@@ -289,7 +289,7 @@ async function fetchOutgoingOffers() {
             response = await fetch('UserOutgoingOffers?user_id=' + encodeURIComponent(userId));
         }
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`No outgoing offers`);
         }
 
         const offers = await response.json();
@@ -323,7 +323,7 @@ async function fetchFavorites() {
             response = await fetch('UserFavorites?user_id=' + encodeURIComponent(userId));
         }
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`No favorites`);
         }
 
         const favorites = await response.json();
@@ -357,7 +357,7 @@ async function fetchPastOffers() {
             response = await fetch('UserPastOffers?user_id=' + encodeURIComponent(userId));
         }
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`No offer history currently`);
         }
 
         const pastOffers = await response.json();
@@ -395,30 +395,30 @@ function displayResults(results, type, showEditButton = false) {
                 linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'incoming':
-				itemDiv.className = 'offer-item';
-                linkClass = 'incoming-link';
-                posterClass = 'incoming-poster';
+				itemDiv.className = 'ticket-item';
+                linkClass = 'ticket-link';
+                posterClass = 'ticket-poster';
                 // For offers, you might link to a details page or a user profile
-                linkHref = `incomingDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
                 break;
             case 'outgoing':
-                itemDiv.className = 'offer-item';
-                linkClass = 'offer-link';
-                posterClass = 'offer-poster';
+				itemDiv.className = 'ticket-item';
+                linkClass = 'ticket-link';
+                posterClass = 'ticket-poster';
                 // For offers, you might link to a details page or a user profile
-                linkHref = `offerDetails.html?offerID=${item.offerID}`;
+                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
                 break;
             case 'favorites':
-                itemDiv.className = 'favorite-item';
-                linkClass = 'favorite-link';
-                posterClass = 'favorite-poster';
+				itemDiv.className = 'ticket-item';
+                linkClass = 'ticket-link';
+                posterClass = 'ticket-poster';
                 linkHref = `ticketDetails.html?ticketID=${item.ticketID}`;
                 break;
             case 'past':
-                itemDiv.className = 'offer-item'; // reuse offer styling
-                linkClass = 'offer-link';
-                posterClass = 'offer-poster';
-                linkHref = `offerDetails.html?offerID=${item.offerID}`;
+				itemDiv.className = 'ticket-item';
+                linkClass = 'ticket-link';
+                posterClass = 'ticket-poster';
+                linkHref = `ticketDetails.html?offerID=${item.offerID}`;
                 break;
             default:
                 itemDiv.className = 'ticket-item';
@@ -500,6 +500,9 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
     sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
 	document.getElementById('update-ticket-modal').style.display = 'block';
 	
+	window.location.href = 'editTicket.html';
+	/*
+	
 
 	// Add delete functionality
 	document.getElementById('delete-button').addEventListener('click', async function() {
@@ -567,6 +570,8 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 	
 	// Populate the form fields and display the modal
 	    populateTicketForm(); 
+		
+	*/
 }
 
 function formatDate(dateStr) {
@@ -605,7 +610,8 @@ document.getElementById('close-update-modal').addEventListener("click", function
 
 //open new ticket submission
 document.getElementById('add-ticket-button').addEventListener("click", function () {
-	document.getElementById('newTicket-modal').style.display = 'block';
+	window.location.href = 'newTicket.html';
+	// document.getElementById('newTicket-modal').style.display = 'block';
 });
 //close new ticket submission
 document.getElementById("close-modal").addEventListener("click", function () {

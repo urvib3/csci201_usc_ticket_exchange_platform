@@ -24,6 +24,8 @@ public class Register extends HttpServlet {
         String university = request.getParameter("university");
         String phoneNumber = request.getParameter("phone");
         String socials = request.getParameter("socials");
+        
+        System.out.println("hashed pass " + password); 
 
         PrintWriter out = response.getWriter();
         
