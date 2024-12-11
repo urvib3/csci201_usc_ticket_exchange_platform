@@ -74,7 +74,7 @@ public class HandlePurchase extends HttpServlet {
             psInsert.setInt(1, ticketID);
             psInsert.setInt(2, buyerID);
             psInsert.setInt(3, sellerID);
-            psInsert.setString(4, (status == 0) ? "rejected" : "approved"); // Status as "approved"
+            psInsert.setString(4, (status == 0) ? "Rejected" : "Approved"); // Status as "approved"
 
             int insertRowsAffected = psInsert.executeUpdate();
 

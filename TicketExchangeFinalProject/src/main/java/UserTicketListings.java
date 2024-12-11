@@ -69,7 +69,7 @@ public class UserTicketListings extends HttpServlet {
             
             // Query to fetch ticket info by user_id
             String query = "SELECT ticketID, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status "
-                    + "FROM tickets WHERE user_id = ?";
+                    + "FROM tickets WHERE user_id = ? AND status = 0";
             ps = conn.prepareStatement(query);
             ps.setString(1, userId);
             rs = ps.executeQuery();

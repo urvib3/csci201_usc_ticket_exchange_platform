@@ -349,29 +349,25 @@ async function fetchPastOffers() {
     }
 
     displayLoadingMessage();
-    try {
-        let response;
-        if (TEST_MODE) {
-            response = await fetch('db/pastOffers.json');
-        } else {
-            response = await fetch('UserPastOffers?user_id=' + encodeURIComponent(userId));
-        }
-        if (!response.ok) {
-            throw new Error(`No offer history currently`);
-        }
+	try {
+	    let response;
+	     response = await fetch('UserPastOffers?user_id=' + encodeURIComponent(userId));
+	    if (!response.ok) {
+	        throw new Error(`No past offers`);
+	    }
 
-        const pastOffers = await response.json();
-        currentResults = [...pastOffers];
+	    const offers = await response.json();
+	    currentResults = [...offers];
 
-        if (currentResults.length > 0) {
-            displayResults(currentResults, 'past');
-        } else {
-            document.getElementById('results').innerHTML = '<p>No past offers found.</p>';
-        }
-    } catch (error) {
-        console.error('Error fetching past offers:', error);
-        document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
-    }
+	    if (currentResults.length > 0) {
+	        displayResults(currentResults, 'past');
+	    } else {
+	        document.getElementById('results').innerHTML = '<p>No outgoing offers found.</p>';
+	    }
+	} catch (error) {
+	    console.error('Error fetching past offers:', error);
+	    document.getElementById('results').innerHTML = `<p>${error.message}</p>`;
+	}
 }
 
 // ====== Display Results ======
@@ -445,6 +441,8 @@ function displayResults(results, type, showEditButton = false) {
 		        </div>
 		`;
 
+			
+		console.log("type: " + type); 
 		if (type === 'incoming') {
 		    itemHTML += `
 		        <div class="buyer-info" style="margin-left: 100px; text-align: left; width: 250px;">
@@ -453,11 +451,25 @@ function displayResults(results, type, showEditButton = false) {
 		            <p><strong>Socials:</strong> ${item.buyerSocials}</p>
 		        </div>
 				<div class="action-buttons" style="display: flex; justify-content: space-between; margin-top:50px;">
-		           <button class="accept-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; margin-right: 10px; background-color: green; color: white; border: none;">Accept</button>
-		           <button class="reject-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; background-color: red; color: white; border: none;">Reject</button>
-		       </div>
+						           <button class="accept-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; margin-right: 10px; background-color: green; color: white; border: none;">Accept</button>
+						           <button class="reject-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; background-color: red; color: white; border: none;">Reject</button>
+						       </div>
 		    `;
 		}
+		if (type === 'outgoing') {
+			    itemHTML += `
+			        <div class="status-info" style="margin-left: 100px; text-align: left; width: 250px; margin-top:50px;">
+			            <p><strong>Status:</strong>Pending</p>
+			        </div>
+			    `;
+		}
+		if (type === 'past') {
+					    itemHTML += `
+					        <div class="status-info" style="margin-left: 100px; text-align: left; width: 250px; margin-top:50px;">
+								<p><strong>Status:</strong> ${item.status}</p>
+					        </div>
+					    `;
+				}
 
 
 		itemHTML += '</a>';
