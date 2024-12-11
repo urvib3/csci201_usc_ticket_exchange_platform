@@ -452,9 +452,9 @@ function displayResults(results, type, showEditButton = false) {
 		            <p><strong>Phone:</strong> ${item.buyerPhone}</p>
 		            <p><strong>Socials:</strong> ${item.buyerSocials}</p>
 		        </div>
-				<div class="action-buttons" style="display: flex; justify-content: space-between; width: 200px;">
-		           <button onclick="acceptPurchase(${JSON.stringify(item)})" style="padding: 5px 10px; background-color: green; color: white; border: none;">Accept</button>
-		           <button onclick="rejectPurchase(${JSON.stringify(item)})" style="padding: 5px 10px; background-color: red; color: white; border: none;">Reject</button>
+				<div class="action-buttons" style="display: flex; justify-content: space-between; margin-top:50px;">
+		           <button id="accept-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; margin-right: 10px; background-color: green; color: white; border: none;">Accept</button>
+		           <button id="reject-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; background-color: red; color: white; border: none;">Reject</button>
 		       </div>
 		    `;
 		}
@@ -478,6 +478,20 @@ function displayResults(results, type, showEditButton = false) {
         }
 
         resultsContainer.appendChild(itemDiv);
+		
+		if (type === 'incoming') {
+					document.getElementById('accept-btn').addEventListener("click", function(event) {
+				        event.preventDefault();  // Prevent the anchor link's default behavior
+				        event.stopPropagation(); // Prevent the event from bubbling up to the link
+				        acceptPurchase(item);    // Call the accept purchase function
+				    });
+
+				    document.getElementById('reject-btn').addEventListener("click", function(event) {
+				        event.preventDefault();  // Prevent the anchor link's default behavior
+				        event.stopPropagation(); // Prevent the event from bubbling up to the link
+				        rejectPurchase(item);    // Call the reject purchase function
+				    });
+				}
     });
 }
 
@@ -589,6 +603,72 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 	*/
 }
 
+// Functions for approving or rejecting a buyer request 
+
+function acceptPurchase(item) {
+	console.log("accepting purchase"); 
+    // Parse the item string back to an object
+    // const item = JSON.parse(itemString);
+
+    // Extract the necessary parameters
+    const ticketID = item.ticketID;
+    const buyerID = item.buyerID;
+    const sellerID = item.sellerID;
+
+    // Prepare the URL for the servlet
+    const url = `AcceptPurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}`;
+
+    // Make an HTTP GET request to the servlet
+    fetch(url, {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response from the servlet (optional)
+        if (data.message === "Success") {
+            alert('Purchase accepted successfully!');
+        } else {
+            alert('Failed to accept the purchase');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while processing your request.');
+    });
+}
+
+function deletePurchase(item) {
+	console.log("rejecting purcahse");
+    // Parse the item string back to an object
+    // const item = JSON.parse(itemString);
+
+    // Extract the necessary parameters
+    const ticketID = item.ticketID;
+    const buyerID = item.buyerID;
+    const sellerID = item.sellerID;
+
+    // Prepare the URL for the servlet
+    const url = `DeletePurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}`;
+
+    // Make an HTTP GET request to the servlet
+    fetch(url, {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response from the servlet (optional)
+        if (data.message === "Success") {
+            alert('Purchase deleted successfully!');
+        } else {
+            alert('Failed to delete the purchase');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while processing your request.');
+    });
+}
+
 function formatDate(dateStr) {
 	dateStr = String(dateStr);
 			
@@ -661,3 +741,5 @@ document.querySelector("newTicketForm").addEventListener("submit", async functio
 		alert("An error occurred while submitting the ticket.");
 	}
 });
+
+

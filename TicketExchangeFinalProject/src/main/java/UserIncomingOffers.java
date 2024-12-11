@@ -50,7 +50,8 @@ public class UserIncomingOffers extends HttpServlet {
     private List<TicketOffer> getTicketOffersBySellerId(int sellerID) throws SQLException {
         List<TicketOffer> ticketOffers = new ArrayList<>();
 
-        String sql = "SELECT o.ticket_id, o.buyer_id, t.eventName, t.startDate, t.endDate, t.ticketPrice, t.additionalInfo, t.negotiable, t.numTickets, t.status "
+        // Modified SQL query to include t.user_id as sellerID
+        String sql = "SELECT o.ticket_id, o.buyer_id, t.eventName, t.startDate, t.endDate, t.ticketPrice, t.additionalInfo, t.negotiable, t.numTickets, t.status, t.user_id AS seller_id "
                    + "FROM offers o "
                    + "JOIN tickets t ON o.ticket_id = t.ticketID "
                    + "WHERE o.seller_id = ?";
@@ -70,13 +71,15 @@ public class UserIncomingOffers extends HttpServlet {
                     boolean negotiable = rs.getBoolean("negotiable");
                     int numTickets = rs.getInt("numTickets");
                     int status = rs.getInt("status");
+                    int sellerId = rs.getInt("seller_id"); // Extracting seller_id from tickets table
 
                     // Get buyer's contact info
                     String buyerUsername = getBuyerUsername(buyerId);
                     String buyerPhone = getBuyerPhone(buyerId);
                     String buyerSocials = getBuyerSocials(buyerId);
 
-                    ticketOffers.add(new TicketOffer(ticketId, buyerId, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status,
+                    // Create TicketOffer with the extracted sellerId
+                    ticketOffers.add(new TicketOffer(ticketId, buyerId, sellerId, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status,
                         buyerUsername, buyerPhone, buyerSocials));
                 }
             }
@@ -143,6 +146,8 @@ public class UserIncomingOffers extends HttpServlet {
             ticketJson.addProperty("buyerUsername", offer.getBuyerUsername());
             ticketJson.addProperty("buyerPhone", offer.getBuyerPhone());
             ticketJson.addProperty("buyerSocials", offer.getBuyerSocials());
+            ticketJson.addProperty("sellerID", offer.getSellerId()); 
+            ticketJson.addProperty("buyerID", offer.getBuyerId()); 
 
             ticketsJsonArray.add(ticketJson);
         }
@@ -162,6 +167,7 @@ public class UserIncomingOffers extends HttpServlet {
     private static class TicketOffer {
         private int ticketId;
         private int buyerId;
+        private int sellerId; // Added sellerId
         private String eventName;
         private int startDate;
         private int endDate;
@@ -174,10 +180,11 @@ public class UserIncomingOffers extends HttpServlet {
         private String buyerPhone;
         private String buyerSocials;
 
-        public TicketOffer(int ticketId, int buyerId, String eventName, int startDate, int endDate, double ticketPrice, String additionalInfo,
+        public TicketOffer(int ticketId, int buyerId, int sellerId, String eventName, int startDate, int endDate, double ticketPrice, String additionalInfo,
                            boolean negotiable, int numTickets, int status, String buyerUsername, String buyerPhone, String buyerSocials) {
             this.ticketId = ticketId;
             this.buyerId = buyerId;
+            this.sellerId = sellerId; // Initialize sellerId
             this.eventName = eventName;
             this.startDate = startDate;
             this.endDate = endDate;
@@ -238,6 +245,13 @@ public class UserIncomingOffers extends HttpServlet {
         public String getBuyerSocials() {
             return buyerSocials;
         }
+
+        public int getSellerId() {
+            return sellerId;
+        }
+        
+        public int getBuyerId() {
+            return buyerId;
+        }
     }
 }
-
