@@ -10,14 +10,6 @@ let isPastOffersActive = false;
 
 const TEST_MODE = false; // Set to true for testing with local JSON
 
-document.addEventListener('DOMContentLoaded', () => {
-    const username = localStorage.getItem('username') || 'Guest';
-    const welcomeMessage = document.getElementById('welcome-message');
-    if (welcomeMessage) {
-        welcomeMessage.textContent = `${username}, welcome`;
-    }
-});
-
 // ====== Event Listeners ======
 
 // My Listings
@@ -91,6 +83,7 @@ function toggleSection(section) {
             isMyListingsActive = true;
             activateButton('mylistings-button');
             fetchMyListings();
+            document.getElementById('add-button-container').style.display = 'block';
             break;
 
         case 'myinfo':
@@ -109,6 +102,7 @@ function toggleSection(section) {
             isOutgoingOffersActive = true;
             activateButton('outgoing-offers-button');
             fetchOutgoingOffers();
+            document.getElementById('add-button-container').style.display = 'block';
             break;
 
         case 'favorites':
@@ -197,7 +191,6 @@ async function fetchMyListings() {
         if (currentResults.length > 0) {
             displayResults(currentResults, 'tickets', true); // show edit buttons
             document.getElementById('sort-by-container').style.display = 'block';
-            document.getElementById('add-button-container').style.display = 'block';
         } else {
             document.getElementById('results').innerHTML = '<p>No tickets found.</p>';
         }
@@ -510,6 +503,13 @@ function displayLoadingMessage() {
 
 // Display username on page load
 document.addEventListener('DOMContentLoaded', () => {
+    const user_id = localStorage.getItem('user_id');
+    if(!user_id) {
+      // User not logged in
+      window.location.href = "login.html";
+      return;
+    }
+
     const username = localStorage.getItem('username') || 'Guest';
     const welcomeMessage = document.getElementById('welcome-message');
     if (welcomeMessage) {
