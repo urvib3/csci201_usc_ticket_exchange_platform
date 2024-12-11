@@ -26,7 +26,9 @@ fetch('Search')
                 width: 128,
                 height: 128
             });
-
+			
+			
+			/*
             const negotiateButton = document.getElementById('negotiate-button');
             if (ticket.negotiable) {
                 negotiateButton.style.display = 'inline-block';
@@ -40,6 +42,8 @@ fetch('Search')
             document.getElementById('buy-button').addEventListener('click', function () {
                 alert(`Redirecting to purchase page for: ${ticket.eventName}`);
             });
+			
+			*/
         } else {
             document.body.innerHTML = '<h1>Ticket not found</h1>';
         }
