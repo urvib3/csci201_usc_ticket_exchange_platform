@@ -30,14 +30,14 @@ public class UserIncomingOffers extends HttpServlet {
 
         try {
             int userID = Integer.parseInt(request.getParameter("user_id"));
-            List<Integer> ticketIds = getTicketIdsBySellerId(userID);
+            List<TicketOffer> ticketOffers = getTicketOffersBySellerId(userID);
 
-            if (ticketIds.isEmpty()) {
+            if (ticketOffers.isEmpty()) {
                 out.println("[]");
                 return;
             }
 
-            JsonArray ticketsJsonArray = getTicketsJson(ticketIds);
+            JsonArray ticketsJsonArray = getTicketsJson(ticketOffers);
             out.println(ticketsJsonArray.toString());
 
         } catch (SQLException | NumberFormatException e) {
@@ -47,58 +47,106 @@ public class UserIncomingOffers extends HttpServlet {
         }
     }
 
-    private List<Integer> getTicketIdsBySellerId(int sellerID) throws SQLException {
-        List<Integer> ticketIds = new ArrayList<>();
+    private List<TicketOffer> getTicketOffersBySellerId(int sellerID) throws SQLException {
+        List<TicketOffer> ticketOffers = new ArrayList<>();
 
-        String sql = "SELECT ticket_id FROM offers WHERE seller_id = ?";
+        String sql = "SELECT o.ticket_id, o.buyer_id, t.eventName, t.startDate, t.endDate, t.ticketPrice, t.additionalInfo, t.negotiable, t.numTickets, t.status "
+                   + "FROM offers o "
+                   + "JOIN tickets t ON o.ticket_id = t.ticketID "
+                   + "WHERE o.seller_id = ?";
         try (Connection conn = MainDBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, sellerID);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ticketIds.add(rs.getInt("ticket_id"));
+                    int ticketId = rs.getInt("ticket_id");
+                    int buyerId = rs.getInt("buyer_id");
+                    String eventName = rs.getString("eventName");
+                    int startDate = rs.getInt("startDate");
+                    int endDate = rs.getInt("endDate");
+                    double ticketPrice = rs.getDouble("ticketPrice");
+                    String additionalInfo = rs.getString("additionalInfo");
+                    boolean negotiable = rs.getBoolean("negotiable");
+                    int numTickets = rs.getInt("numTickets");
+                    int status = rs.getInt("status");
+
+                    // Get buyer's contact info
+                    String buyerUsername = getBuyerUsername(buyerId);
+                    String buyerPhone = getBuyerPhone(buyerId);
+                    String buyerSocials = getBuyerSocials(buyerId);
+
+                    ticketOffers.add(new TicketOffer(ticketId, buyerId, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status,
+                        buyerUsername, buyerPhone, buyerSocials));
                 }
             }
         }
-        return ticketIds;
+        return ticketOffers;
     }
 
-    private JsonArray getTicketsJson(List<Integer> ticketIds) throws SQLException {
-        JsonArray ticketsJsonArray = new JsonArray();
-
-        StringBuilder sql = new StringBuilder("SELECT ticketID, eventName, startDate, endDate, ticketPrice, additionalInfo, negotiable, numTickets, status FROM tickets WHERE ticketID IN (");
-        for (int i = 0; i < ticketIds.size(); i++) {
-            sql.append("?");
-            if (i < ticketIds.size() - 1) {
-                sql.append(", ");
-            }
-        }
-        sql.append(")");
-
+    private String getBuyerUsername(int buyerId) throws SQLException {
+        String sql = "SELECT fullname FROM users WHERE user_id = ?";
         try (Connection conn = MainDBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-
-            for (int i = 0; i < ticketIds.size(); i++) {
-                ps.setInt(i + 1, ticketIds.get(i));
-            }
-
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, buyerId);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    JsonObject ticketJson = new JsonObject();
-                    ticketJson.addProperty("ticketID", rs.getInt("ticketID"));
-                    ticketJson.addProperty("eventName", rs.getString("eventName"));
-                    ticketJson.addProperty("ticketPrice", rs.getDouble("ticketPrice"));
-                    ticketJson.addProperty("additionalInfo", rs.getString("additionalInfo"));
-                    ticketJson.addProperty("negotiable", rs.getBoolean("negotiable"));
-                    ticketJson.addProperty("numTickets", rs.getInt("numTickets"));
-                    ticketJson.addProperty("status", rs.getInt("status"));
-                    ticketJson.addProperty("startDate", formatDate(rs.getInt("startDate")));
-                    ticketJson.addProperty("endDate", formatDate(rs.getInt("endDate")));
-                    ticketsJsonArray.add(ticketJson);
+                if (rs.next()) {
+                    return rs.getString("fullname");
                 }
             }
         }
+        return "";
+    }
+
+    private String getBuyerPhone(int buyerId) throws SQLException {
+        String sql = "SELECT phone_number FROM users WHERE user_id = ?";
+        try (Connection conn = MainDBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, buyerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("phone_number");
+                }
+            }
+        }
+        return "";
+    }
+
+    private String getBuyerSocials(int buyerId) throws SQLException {
+        String sql = "SELECT socials FROM users WHERE user_id = ?";
+        try (Connection conn = MainDBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, buyerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("socials");
+                }
+            }
+        }
+        return "";
+    }
+
+    private JsonArray getTicketsJson(List<TicketOffer> ticketOffers) {
+        JsonArray ticketsJsonArray = new JsonArray();
+
+        for (TicketOffer offer : ticketOffers) {
+            JsonObject ticketJson = new JsonObject();
+            ticketJson.addProperty("ticketID", offer.getTicketId());
+            ticketJson.addProperty("eventName", offer.getEventName());
+            ticketJson.addProperty("ticketPrice", offer.getTicketPrice());
+            ticketJson.addProperty("additionalInfo", offer.getAdditionalInfo());
+            ticketJson.addProperty("negotiable", offer.isNegotiable());
+            ticketJson.addProperty("numTickets", offer.getNumTickets());
+            ticketJson.addProperty("status", offer.getStatus());
+            ticketJson.addProperty("startDate", formatDate(offer.getStartDate()));
+            ticketJson.addProperty("endDate", formatDate(offer.getEndDate()));
+            ticketJson.addProperty("buyerUsername", offer.getBuyerUsername());
+            ticketJson.addProperty("buyerPhone", offer.getBuyerPhone());
+            ticketJson.addProperty("buyerSocials", offer.getBuyerSocials());
+
+            ticketsJsonArray.add(ticketJson);
+        }
+
         return ticketsJsonArray;
     }
 
@@ -109,4 +157,87 @@ public class UserIncomingOffers extends HttpServlet {
             return "Invalid Date";
         }
     }
+
+    // Inner class to hold ticket and buyer information
+    private static class TicketOffer {
+        private int ticketId;
+        private int buyerId;
+        private String eventName;
+        private int startDate;
+        private int endDate;
+        private double ticketPrice;
+        private String additionalInfo;
+        private boolean negotiable;
+        private int numTickets;
+        private int status;
+        private String buyerUsername;
+        private String buyerPhone;
+        private String buyerSocials;
+
+        public TicketOffer(int ticketId, int buyerId, String eventName, int startDate, int endDate, double ticketPrice, String additionalInfo,
+                           boolean negotiable, int numTickets, int status, String buyerUsername, String buyerPhone, String buyerSocials) {
+            this.ticketId = ticketId;
+            this.buyerId = buyerId;
+            this.eventName = eventName;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.ticketPrice = ticketPrice;
+            this.additionalInfo = additionalInfo;
+            this.negotiable = negotiable;
+            this.numTickets = numTickets;
+            this.status = status;
+            this.buyerUsername = (buyerUsername == null || buyerUsername.isEmpty()) ? "None" : buyerUsername;
+            this.buyerPhone = (buyerPhone == null || buyerPhone.isEmpty()) ? "None" : buyerPhone;
+            this.buyerSocials = (buyerSocials == null || buyerSocials.isEmpty()) ? "None" : buyerSocials;
+        }
+
+        public int getTicketId() {
+            return ticketId;
+        }
+
+        public String getEventName() {
+            return eventName;
+        }
+
+        public int getStartDate() {
+            return startDate;
+        }
+
+        public int getEndDate() {
+            return endDate;
+        }
+
+        public double getTicketPrice() {
+            return ticketPrice;
+        }
+
+        public String getAdditionalInfo() {
+            return additionalInfo;
+        }
+
+        public boolean isNegotiable() {
+            return negotiable;
+        }
+
+        public int getNumTickets() {
+            return numTickets;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public String getBuyerUsername() {
+            return buyerUsername;
+        }
+
+        public String getBuyerPhone() {
+            return buyerPhone;
+        }
+
+        public String getBuyerSocials() {
+            return buyerSocials;
+        }
+    }
 }
+
