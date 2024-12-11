@@ -460,8 +460,8 @@ function displayResults(results, type, showEditButton = false) {
 		            <p><strong>Socials:</strong> ${item.buyerSocials}</p>
 		        </div>
 				<div class="action-buttons" style="display: flex; justify-content: space-between; margin-top:50px;">
-		           <button id="accept-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; margin-right: 10px; background-color: green; color: white; border: none;">Accept</button>
-		           <button id="reject-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; background-color: red; color: white; border: none;">Reject</button>
+		           <button class="accept-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; margin-right: 10px; background-color: green; color: white; border: none;">Accept</button>
+		           <button class="reject-btn" onclick="event.preventDefault();" style="padding: 5px 10px; width:60px; background-color: red; color: white; border: none;">Reject</button>
 		       </div>
 		    `;
 		}
@@ -487,13 +487,13 @@ function displayResults(results, type, showEditButton = false) {
         resultsContainer.appendChild(itemDiv);
 		
 		if (type === 'incoming') {
-					document.getElementById('accept-btn').addEventListener("click", function(event) {
+					itemDiv.querySelector('.accept-btn').addEventListener("click", function(event) {
 				        event.preventDefault();  // Prevent the anchor link's default behavior
 				        event.stopPropagation(); // Prevent the event from bubbling up to the link
 				        acceptPurchase(item);    // Call the accept purchase function
 				    });
 
-				    document.getElementById('reject-btn').addEventListener("click", function(event) {
+				    itemDiv.querySelector('.reject-btn').addEventListener("click", function(event) {
 				        event.preventDefault();  // Prevent the anchor link's default behavior
 				        event.stopPropagation(); // Prevent the event from bubbling up to the link
 				        rejectPurchase(item);    // Call the reject purchase function
@@ -534,7 +534,6 @@ function editTicket(ticketID, eventName, startDate, endDate, ticketPrice, additi
 
     // Store the ticket data in sessionStorage
     sessionStorage.setItem('ticketData', JSON.stringify(ticketData));
-	document.getElementById('update-ticket-modal').style.display = 'block';
 	
 	window.location.href = 'editTicket.html';
 	/*
@@ -626,25 +625,23 @@ function acceptPurchase(item) {
     const url = `AcceptPurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}`;
 
     // Make an HTTP GET request to the servlet
-    fetch(url, {
-        method: 'GET',
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Handle the response from the servlet (optional)
-        if (data.message === "Success") {
-            alert('Purchase accepted successfully!');
-        } else {
-            alert('Failed to accept the purchase');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while processing your request.');
-    });
-}
+	fetch(url, {
+	    method: 'GET',
+	})
+	.then(response => {
+	    if (response.ok) {
+	        alert('Purchase accepted successfully!');
+	    } else {
+	        alert('Failed to accept the purchase');
+	    }
+	})
+	.catch(error => {
+	    console.error('Error:', error);
+	    alert('An error occurred while processing your request.');
+	});
 
-function deletePurchase(item) {
+
+function rejectPurchase(item) {
 	console.log("rejecting purcahse");
     // Parse the item string back to an object
     // const item = JSON.parse(itemString);
@@ -655,7 +652,7 @@ function deletePurchase(item) {
     const sellerID = item.sellerID;
 
     // Prepare the URL for the servlet
-    const url = `DeletePurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}`;
+    const url = `RejectPurchase?ticketID=${ticketID}&buyerID=${buyerID}&sellerID=${sellerID}`;
 
     // Make an HTTP GET request to the servlet
     fetch(url, {

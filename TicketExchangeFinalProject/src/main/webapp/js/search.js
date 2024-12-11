@@ -274,19 +274,28 @@ function displayResults(results) {
 					const buyerID = localStorage.getItem('user_id'); 
 
 					const url = `BuyTicket?ticketID=${ticketID}&sellerID=${sellerID}&buyerID=${buyerID}`;
-
+					
 					// Make the request (no need to handle the response)
 					fetch(url, {
 					    method: 'GET'  // Use GET or POST depending on your backend setup
 					})
-					.then(() => {
+					.then(response => {
+					    if (!response.ok) {
+					        // If response is not OK, parse the error message and throw it
+					        return response.json().then(errorData => {
+					            throw new Error(errorData.message || 'An error occurred');
+					        });
+					    }
+					    return response.json();  // If OK, continue to parse JSON
+					})
+					.then(data => {
 					    // Handle the UI update or show a success message after the request
-					    alert(`Successfully requestd purchase: ${ticket.eventName}`);
+					    alert(`Successfully requested purchase: ${ticket.eventName}`);
 					})
 					.catch(error => {
-					    // Handle any errors (e.g., network issue)
+					    // Handle any errors (e.g., network issue, response error)
 					    console.error('Error:', error);
-					    alert('There was an error processing your purchase. Please try again later.');
+					    alert(`Error: ${error.message}`);  // Show the error message to the user
 					});
                 });
 
