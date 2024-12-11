@@ -148,7 +148,7 @@ function deactivateAllSections() {
 function activateButton(buttonId) {
     const button = document.getElementById(buttonId);
     if (button) {
-        button.style.backgroundColor = '#007bff'; 
+        button.style.backgroundColor = '#d70016'; 
         button.style.color = '#fff';
     }
 }
@@ -480,7 +480,7 @@ function displayResults(results, type, showEditButton = false) {
         // If showing My Listings and we want to edit
         if (showEditButton && type === 'tickets') {
             const editButton = document.createElement('button');
-            editButton.className = 'edit-button';
+            editButton.className = 'edit-button main-buttons';
             editButton.textContent = 'Edit';
             editButton.onclick = () => {
                 // Redirect to edit page or open a modal
