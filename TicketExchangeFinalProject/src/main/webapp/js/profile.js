@@ -8,7 +8,7 @@ let isOutgoingOffersActive = false;
 let isFavoritesActive = false;
 let isPastOffersActive = false;
 
-const TEST_MODE = false; // Set to true for testing with local JSON
+const TEST_MODE = true; // Set to true for testing with local JSON
 
 document.addEventListener('DOMContentLoaded', () => {
     const username = localStorage.getItem('username') || 'Guest';
@@ -166,7 +166,7 @@ function resetButton(buttonId) {
 // Fetch My Listings
 async function fetchMyListings() {
     const userId = localStorage.getItem('user_id');
-    if(!userId) {
+    if(!userId&&!TEST_MODE) {
         document.getElementById('welcome-message').textContent = 'Error Authenticating';
         return;
     }
@@ -203,7 +203,7 @@ async function fetchMyListings() {
 // Fetch My Info
 async function fetchMyInfo() {
     const userId = localStorage.getItem('user_id');
-    if(!userId) {
+    if(!userId&&!TEST_MODE) {
         document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
         return;
     }
@@ -241,7 +241,7 @@ async function fetchMyInfo() {
 // Fetch Incoming Offers
 async function fetchIncomingOffers() {
     const userId = localStorage.getItem('user_id');
-    if (!userId) {
+    if (!userId&&!TEST_MODE) {
         document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
         return;
     }
@@ -275,7 +275,7 @@ async function fetchIncomingOffers() {
 // Fetch Outgoing Offers
 async function fetchOutgoingOffers() {
     const userId = localStorage.getItem('user_id');
-    if (!userId) {
+    if (!userId&&!TEST_MODE) {
         document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
         return;
     }
@@ -309,7 +309,7 @@ async function fetchOutgoingOffers() {
 // Fetch Favorites
 async function fetchFavorites() {
     const userId = localStorage.getItem('user_id');
-    if (!userId) {
+    if (!userId&&!TEST_MODE) {
         document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
         return;
     }
@@ -343,7 +343,7 @@ async function fetchFavorites() {
 // Fetch Past Offers
 async function fetchPastOffers() {
     const userId = localStorage.getItem('user_id');
-    if (!userId) {
+    if (!userId&&!TEST_MODE) {
         document.getElementById('welcome-message').textContent = 'Error Authenticating'; 
         return;
     }
