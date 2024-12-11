@@ -30,31 +30,30 @@
 	            <button class="main-buttons" type="button" id="favorites-button">Favorites</button>
 	            <button class="main-buttons" type="button" id="past-offers-button">Past Offers</button>
             </div>
-
-            <div id="sort-by-container" style="display: none;">
-                <label for="sort-by">Sort By:</label>
-                <select id="sort-by">
-                    <option value="date-asc">Date (Asc)</option>
-                    <option value="date-desc">Date (Desc)</option>
-                    <option value="price-asc">Price (Asc)</option>
-                    <option value="price-desc">Price (Desc)</option>
-                    <option value="popularity-asc">Popularity (Asc)</option>
-                    <option value="popularity-desc">Popularity (Desc)</option>
-                </select>
-            </div>
         </div>
 
+		<div id="my-info-container" style="display: none;">
+		</div>
 
-        <div id="my-info-container" style="display: none;"></div>
+		<div id="sort-by-container" style="display: none;">
+			<label for="sort-by">Sort By:</label>
+			<select id="sort-by">
+				<option value="date-asc">Date (Asc)</option>
+				<option value="date-desc">Date (Desc)</option>
+				<option value="price-asc">Price (Asc)</option>
+				<option value="price-desc">Price (Desc)</option>
+				<option value="popularity-asc">Popularity (Asc)</option>
+				<option value="popularity-desc">Popularity (Desc)</option>
+			</select>
+		</div>
+		<div id="results">
+		<!-- Dynamic content (tickets, offers, favorites) will appear here -->
+		</div>
 
-        <div id="results">
-            <!-- Dynamic content (tickets, offers, favorites) will appear here -->
-        </div>
-
-        <!-- Add ticket button (only shown for My Listings) -->
-        <div class="add-button-container" id="add-button-container">
-        	<button class="add-ticket-button" id="add-ticket-button">+</button>
-        </div>
+		<!-- Add ticket button (only shown for My Listings) -->
+		<div class="add-button-container" id="add-button-container">
+			<button class="add-ticket-button" id="add-ticket-button">New Ticket</button>
+		</div>
     </div>
     
     <!-- Modal for New Ticket Form -->
