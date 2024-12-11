@@ -83,6 +83,7 @@ function toggleSection(section) {
             isMyListingsActive = true;
             activateButton('mylistings-button');
             fetchMyListings();
+            document.getElementById('add-button-container').style.display = 'block';
             break;
 
         case 'myinfo':
@@ -101,6 +102,7 @@ function toggleSection(section) {
             isOutgoingOffersActive = true;
             activateButton('outgoing-offers-button');
             fetchOutgoingOffers();
+            document.getElementById('add-button-container').style.display = 'block';
             break;
 
         case 'favorites':
@@ -189,7 +191,6 @@ async function fetchMyListings() {
         if (currentResults.length > 0) {
             displayResults(currentResults, 'tickets', true); // show edit buttons
             document.getElementById('sort-by-container').style.display = 'block';
-            document.getElementById('add-button-container').style.display = 'block';
         } else {
             document.getElementById('results').innerHTML = '<p>No tickets found.</p>';
         }
