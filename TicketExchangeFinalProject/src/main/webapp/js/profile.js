@@ -8,7 +8,7 @@ let isOutgoingOffersActive = false;
 let isFavoritesActive = false;
 let isPastOffersActive = false;
 
-const TEST_MODE = true; // Set to true for testing with local JSON
+const TEST_MODE = false; // Set to true for testing with local JSON
 
 document.addEventListener('DOMContentLoaded', () => {
     const username = localStorage.getItem('username') || 'Guest';
@@ -428,25 +428,40 @@ function displayResults(results, type, showEditButton = false) {
 
         // Construct HTML based on data structure
         // Adjust property names according to your actual data
-        let imageUrl = item.poster || 'images/sclogo.png';
-        let title = item.eventName || item.title || 'No Title';
-        let price = item.ticketPrice ? `$${item.ticketPrice}` : (item.offerPrice ? `$${item.offerPrice}` : '');
-        let date = formatDate(item.startDate) || formatDate(item.date) || '';
-        let details = item.additionalInfo || item.details || '';
+		let imageUrl = item.poster || 'images/sclogo.png';
+		let title = item.eventName || item.title || 'No Title';
+		let price = item.ticketPrice ? `$${item.ticketPrice}` : (item.offerPrice ? `$${item.offerPrice}` : '');
+		let date = formatDate(item.startDate) || formatDate(item.date) || '';
+		let details = item.additionalInfo || item.details || '';
 
-        // Render ticket
-        // Create inner HTML
-        const itemHTML = `
-            <a href="${linkHref}" class="${linkClass}">
-                <img src="${imageUrl}" alt="${title}" class="${posterClass}">
-                <div>
-                    <h3>${title}</h3>
-                    ${price ? `<p>Price: ${price}</p>` : ''}
-                    ${date ? `<p>Date: ${date}</p>` : ''}
-                    ${details ? `<p>Details: ${details}</p>` : ''}
-                </div>
-            </a>
-        `;
+		let itemHTML = `
+		    <a href="${linkHref}" class="${linkClass}">
+		        <img src="${imageUrl}" alt="${title}" class="${posterClass}">
+		        <div>
+		            <h3>${title}</h3>
+		            ${price ? `<p>Price: ${price}</p>` : ''}
+		            ${date ? `<p>Date: ${date}</p>` : ''}
+		            ${details ? `<p>Details: ${details}</p>` : ''}
+		        </div>
+		`;
+
+		if (type === 'incoming') {
+		    itemHTML += `
+		        <div class="buyer-info" style="margin-left: 100px; text-align: left; width: 250px;">
+		            <p><strong>Buyer Name:</strong> ${item.buyerUsername}</p>
+		            <p><strong>Phone:</strong> ${item.buyerPhone}</p>
+		            <p><strong>Socials:</strong> ${item.buyerSocials}</p>
+		        </div>
+				<div class="action-buttons" style="display: flex; justify-content: space-between; width: 200px;">
+		           <button onclick="acceptPurchase(${JSON.stringify(item)})" style="padding: 5px 10px; background-color: green; color: white; border: none;">Accept</button>
+		           <button onclick="rejectPurchase(${JSON.stringify(item)})" style="padding: 5px 10px; background-color: red; color: white; border: none;">Reject</button>
+		       </div>
+		    `;
+		}
+
+
+		itemHTML += '</a>';
+
 
         itemDiv.innerHTML = itemHTML;
 
