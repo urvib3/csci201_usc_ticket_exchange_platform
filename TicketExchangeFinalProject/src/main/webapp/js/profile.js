@@ -10,14 +10,6 @@ let isPastOffersActive = false;
 
 const TEST_MODE = false; // Set to true for testing with local JSON
 
-document.addEventListener('DOMContentLoaded', () => {
-    const username = localStorage.getItem('username') || 'Guest';
-    const welcomeMessage = document.getElementById('welcome-message');
-    if (welcomeMessage) {
-        welcomeMessage.textContent = `${username}, welcome`;
-    }
-});
-
 // ====== Event Listeners ======
 
 // My Listings
@@ -510,6 +502,13 @@ function displayLoadingMessage() {
 
 // Display username on page load
 document.addEventListener('DOMContentLoaded', () => {
+    const user_id = localStorage.getItem('user_id');
+    if(!user_id) {
+      // User not logged in
+      window.location.href = "login.html";
+      return;
+    }
+
     const username = localStorage.getItem('username') || 'Guest';
     const welcomeMessage = document.getElementById('welcome-message');
     if (welcomeMessage) {
