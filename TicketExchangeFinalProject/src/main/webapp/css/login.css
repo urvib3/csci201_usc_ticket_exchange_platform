@@ -53,21 +53,6 @@
 	border-color: #999;
 }
 
-.links {
-	margin-top: 15px;
-}
-
-.links a {
-	font-size: 14px;
-	color: #007bff;
-	text-decoration: none;
-	margin: 0 10px;
-}
-
-.links a:hover {
-	text-decoration: underline;
-}
-
 .captcha-container {
     display: flex;
     align-items: center;

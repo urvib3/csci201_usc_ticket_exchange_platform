@@ -12,6 +12,7 @@ body, html {
     align-items: center;
 }
 
+/* background image */
 .bg {
     position: fixed;
     z-index: -1;
@@ -26,6 +27,7 @@ body, html {
     background-repeat: no-repeat;
 }
 
+/* TBAY logo */
 #logo {
     width: 350px;
     height: 350px;
@@ -33,6 +35,26 @@ body, html {
     margin-top: -195px;
 }
 
+/* navigation upper right buttons*/
+nav{
+    position: fixed;
+    top: 10px;
+    right: 50px;
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+nav button {
+    width: 50%;
+	padding: 10px;
+    margin-top: 5%;
+	margin-left: 5%;
+    margin-right: 5%;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+/* main red buttons styling, sizing done in individual css*/
 .main-buttons{
     background: #feb3a2;
     color: #d70016;
@@ -49,7 +71,7 @@ body, html {
     color: #fff;
 }
 
-/* container styling */
+/* main container styling */
 .main-container{
     background: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
@@ -65,6 +87,7 @@ body, html {
     color: #333;
 }
 
+/* auth container styling */
 .auth-container {
 	position: absolute;
 	width: 500px;
@@ -75,4 +98,20 @@ body, html {
 	font-size: 24px;
 	margin-top: -55px;
 	color: #333;
+}
+
+/* link styling */
+.links {
+	margin-top: 15px;
+}
+
+.links a {
+	font-size: 14px;
+	color: #007bff;
+	text-decoration: none;
+	margin: 0 10px;
+}
+
+.links a:hover {
+	text-decoration: underline;
 }
