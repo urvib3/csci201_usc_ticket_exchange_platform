@@ -1,6 +1,9 @@
 .profile {
     background: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -78,6 +81,232 @@
 
 #results {
     margin-top: 20px;
+    overflow-.profile {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 700px;
+    width: 50%;
+    height: auto;
+}
+
+.profile h2 {
+    font-size: 24px;
+    margin-top: -50px;
+    color: #333;
+}
+
+/* main buttons */
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* Creates 3 columns */
+    gap: 10px;  /* Adds space between buttons */
+    margin: 0 auto;  /* Centers the container */
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.buttons button {
+    width: auto;
+    padding: 10px;
+    margin-top: 5%;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Edit Button */
+.edit-button {
+    background: #feb3a2;
+    color: #d70016;
+    border: 3px solid #d70016;
+    border-radius: 6px;
+    padding: 5px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover{
+    background-color: #ff9999;
+    border-color: #ff0000; 
+    color: #fff;
+}
+
+/* my listing sort by */
+#sort-by-container {
+    margin-top: 20px;
+}
+
+#sort-by-container select {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #d70016;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+#sort-by-container select:focus {
+    border-color: #ff4d4d;
+    box-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+}
+
+#results {
+    margin-top: 20px;
+    overflow-y: auto;
+}
+
+/* my info */
+#my-info-container {
+    margin-left: 25%;
+    margin-top: 50px;
+    background-color: white;
+    width: 50%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info {
+    text-align: left;
+}
+
+.info p {
+    padding: 10px;
+    margin-left: 5%;
+    font-size: 24px;
+	margin-top: 0px;
+	color: #333;
+}
+
+/* Ticket/Offer Items */
+.ticket-item, .offer-item, .favorite-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px;
+    margin-left: 10%;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+    width: 80%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.ticket-item:hover, .offer-item:hover, .favorite-item:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ticket-link, .offer-link, .favorite-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ticket-poster, .offer-poster, .favorite-poster {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Add button container */
+.add-button-container {
+    text-align: center;
+    /*margin-top: 20px;*/
+    display: none;
+}
+
+.add-ticket-button {
+    font-size: 20px;  
+    width: auto;
+    padding: 12px; 
+    height: auto;
+    background-color: #28a745;
+    color: white;
+    border: 3px solid #28a745;
+    border-radius: 6px; 
+    /*display: flex;
+    justify-content: center;  
+    align-items: center; */ 
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+    font-weight: bold;
+}
+
+.add-ticket-button:hover {
+    background-color: #218838;  
+    border: 3px solid #1f8337;
+    transform: scale(1.05);  
+}
+
+/* modal */
+.modal {
+	z-index: 9999;
+	position: fixed;
+	background: rgba(255, 225, 226, 0.9);
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	width: 50vw;
+	height: relative;
+	border: 3px solid #d70016;
+	border-radius: 6px;
+}
+.submit {
+	width: 25%;
+	padding: 10px;
+	margin-left: 5%;
+	margin-right: 5%;
+	background: #feb3a2;
+	color: #d70016;
+	border: 3px solid #d70016;
+	border-radius: 6px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.submit:hover {
+	background-color: #ff9999;
+	border-color: #ff0000;
+	color: #fff;
+}
+
+.close {
+	position: absolute;
+	top: 10px;
+	left: 20px;
+	font-size: 36px;
+	cursor: pointer;
+	color: #d70016;
+	font-weight: bold;
+}
+
+.close:hover {
+	color: red;
+	border: 2px solid black;
+}
 }
 
 /* my info */
