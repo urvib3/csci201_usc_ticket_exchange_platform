@@ -81,6 +81,8 @@ nav button {
     text-align: center;
     width: 50%;
     height: auto;
+    margin-top: 20vh;
+    margin-bottom: 20vh;
 }
 
 .main-container h2 {
@@ -90,9 +92,8 @@ nav button {
 
 /* auth container styling */
 .auth-container {
-	position: absolute;
-	width: 500px;
-	height: 450px;
+	width: 50vw;
+    max-width: 500px;
 }
 
 .auth-container h2 {
