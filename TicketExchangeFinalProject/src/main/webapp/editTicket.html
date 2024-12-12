@@ -14,38 +14,36 @@
 </head>
 <body>
     <div class = "bg"></div>
-    <form id="ticketForm" class = "form">
-    
-    	<img id="logo" src="images/logo.PNG" alt="Logo">
-   	 	<h1>Update Ticket Information</h1>
-    
-        <label for="eventName">Event Name</label>
-        <input type="text" id="eventName" name="eventName" required><br><br>
+    <div class="auth-container main-container">
+        <img id="logo" src="images/logo.PNG" alt="Logo">
+        <h2>Update Ticket Information</h1>
 
-        <label for="startDate">Start Date:</label>
-        <input type="text" id="startDate" name="startDate" required><br><br>
+        <form id="ticketForm" class = "form">
+            <div class="enter-info">
+                <input type="text" id="eventName" name="eventName" placeholder="Event Name" required >
+                
+                <input type="text" id="startDate" name="startDate" placeholder="Start Date" required>
+                
+                <input type="text" id="endDate" name="endDate" placeholder="End Date" required>
+                
+                <input type="number" id="ticketPrice" name="ticketPrice" placeholder="Ticket Price" required>
 
-        <label for="endDate">End Date:</label>
-        <input type="text" id="endDate" name="endDate" required><br><br>
+                <label for="negotiable">Negotiable:</label>
+                <input type="checkbox" id="negotiable" name="negotiable">
 
-        <label for="ticketPrice">Ticket Price:</label>
-        <input type="number" id="ticketPrice" name="ticketPrice" required><br><br>
-
-        <label for="additionalInfo">Additional Info:</label>
-        <textarea id="additionalInfo" name="additionalInfo"></textarea><br><br>
-
-        <label for="negotiable">Negotiable:</label>
-        <input type="checkbox" id="negotiable" name="negotiable"><br><br>
-
-        <label for="numTickets">Number of Tickets:</label>
-        <input type="number" id="numTickets" name="numTickets" required><br><br>
-		<div class = "button-container">
-        	<button type="button" id="cancel-button" class = "submit main-buttons" onclick="window.location.href='profile.html';">Cancel</button>
-        	<button type="button" id="delete-button" class = "submit main-buttons">Delete</button>
-        	<button type="submit" class = "submit main-buttons">Submit</button>
-        </div>
-    </form>
-
+                <textarea id="additionalInfo" name="additionalInfo" placeholder="Additional Information"></textarea>
+                
+                
+                <input type="number" id="numTickets" name="numTickets" placeholder="Number of Tickets" required>
+                
+                <div class = "button-container">
+                    <button type="button" id="cancel-button" class = "submit main-buttons" onclick="window.location.href='profile.html';">Cancel</button>
+                    <button type="button" id="delete-button" class = "submit main-buttons">Delete</button>
+                    <button type="submit" class = "submit main-buttons">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
     <script>
         // Initialize Pikaday for the startDate and endDate inputs
         const startDatePicker = new Pikaday({

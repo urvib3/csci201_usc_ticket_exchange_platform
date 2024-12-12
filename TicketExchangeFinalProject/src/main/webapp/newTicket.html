@@ -13,37 +13,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.2/pikaday.min.js"></script>
 </head>
 <body>
-    
     <div class = "bg"></div>
-    <div class="main-container">
+    <div class="auth-container main-container">
+        <img id="logo" src="images/logo.PNG" alt="Logo">
+        <h2>Submit Ticket Information</h2>
+            
         <form id="ticketForm" class = "form">
-        
-            <img id="logo" src="images/logo.PNG" alt="Logo">
-        
-            <h2>Submit Ticket Information</h2>
-        
-            <label for="eventName">Event Name</label>
-            <input type="text" id="eventName" name="eventName" required><br><br>
+            <div class="enter-info">
+                
+                    <input type="text" id="eventName" name="eventName" placeholder="Event Name" required >
+                
+                    <input type="text" id="startDate" name="startDate" placeholder="Start Date" required>
+                
+                    <input type="text" id="endDate" name="endDate" placeholder="End Date" required>
+                
+                    <input type="number" id="ticketPrice" name="ticketPrice" placeholder="Ticket Price" required>
 
-            <label for="startDate">Start Date:</label>
-            <input type="text" id="startDate" name="startDate" required><br><br>
+                    <label for="negotiable">Negotiable:</label>
+                    <input type="checkbox" id="negotiable" name="negotiable">
 
-            <label for="endDate">End Date:</label>
-            <input type="text" id="endDate" name="endDate" required><br><br>
-
-            <label for="ticketPrice">Ticket Price:</label>
-            <input type="number" id="ticketPrice" name="ticketPrice" required><br><br>
-
-            <label for="additionalInfo">Additional Info:</label>
-            <textarea id="additionalInfo" name="additionalInfo"></textarea><br><br>
-
-            <label for="negotiable">Negotiable:</label>
-            <input type="checkbox" id="negotiable" name="negotiable"><br><br>
-
-            <label for="numTickets">Number of Tickets:</label>
-            <input type="number" id="numTickets" name="numTickets" required><br><br>
-
-            <button type="submit" class = "submit main-buttons">Submit</button>
+                    <textarea id="additionalInfo" name="additionalInfo" placeholder="Additional Information"></textarea>
+                
+                
+                    <input type="number" id="numTickets" name="numTickets" placeholder="Number of Tickets" required>
+                
+            
+                <button type="submit" class = "submit main-buttons">Submit</button>
+            </div>
         </form>
     </div>
     <script>
