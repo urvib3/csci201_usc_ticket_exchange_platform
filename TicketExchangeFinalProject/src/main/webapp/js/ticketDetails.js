@@ -11,9 +11,15 @@ fetch('Search')
             document.getElementById('poster').src = ticket.poster || 'images/sclogo.png';
             document.getElementById('poster').alt = ticket.eventName;
             document.getElementById('price').textContent = `$${ticket.ticketPrice}`;
-            document.getElementById('date').textContent = `${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)}`;
+            document.getElementById('startDate').textContent = `${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)}`;
             document.getElementById('details').textContent = `${ticket.additionalInfo}`;
             document.getElementById('location').textContent = `${ticket.location || 'Not specified'}`;
+			//endDate
+			//numTickets
+			//status
+			document.getElementById('endDate').textContent = `${String(ticket.endDate).slice(4, 6)}-${String(ticket.endDate).slice(6, 8)}-${String(ticket.endDate).slice(0, 4)}`;
+			document.getElementById('numTickets').textContent = ticket.numTickets;
+			document.getElementById('status').textContent = ticket.status;
 
             // Prepare ticket details text for QR code
             const qrText = `Event: ${ticket.eventName}\nDate: ${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)}\nLocation: ${ticket.location || 'Not specified'}\nPrice: $${ticket.ticketPrice}\nDetails: ${ticket.additionalInfo}`;
