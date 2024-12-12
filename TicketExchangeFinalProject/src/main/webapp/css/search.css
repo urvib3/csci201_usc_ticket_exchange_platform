@@ -26,17 +26,12 @@ body, html {
 	font-weight: bold;
 }
 
-
 .search-container {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
     padding: 20px 40px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    text-align: center;
     max-width: 700px;
-    width: 100%;
+    width: 80vw;
     margin: 0 auto;
-    margin-top:120px;
+    margin-top:0px;
     overflow: visible;
     box-sizing: border-box;
 }
@@ -79,8 +74,14 @@ body, html {
     min-width: 150px;
 }
 
+.filter-group input{
+    margin-bottom: 10px;
+}
+
 .negotiable-sort {
     display: flex;
+    flex: 1;
+    min-width: 150px;
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
@@ -90,6 +91,10 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.negotiable-div{
+    margin-top: 15px;
     width: 100%;
 }
 

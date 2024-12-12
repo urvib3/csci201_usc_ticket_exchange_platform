@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class="top-right-buttons">
+	<nav class="top-right-buttons">
         <!-- Logout Button -->
         <button class="main-buttons" id="logoutBtn">Logout</button>
         <!-- Search Button -->
         <button class="main-buttons" onclick="window.location.href='profile.html'">Profile</button>
-    </div>
+    </nav>
     
     <div class="bg"></div>
-    <div class="search-container">
+    <div class="search-container main-container">
         <!-- Welcome Message -->
         <h2 id="welcome-message"></h2>
 
@@ -55,12 +55,12 @@
                 </div>
 
                 <!-- Negotiable and Sort By Filters -->
-                <div class="filter-group negotiable-sort">
+                <div class="negotiable-sort">
                     <div>
                         <label for="negotiable">Negotiable:</label>
                         <input type="checkbox" id="negotiable">
                     </div>
-                    <div>
+                    <div class="negotiable-div">
                         <label for="sort-by">Sort By:</label>
                         <select id="sort-by">
                             <option value="date-asc">Date (Asc)</option>
