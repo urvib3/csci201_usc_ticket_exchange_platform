@@ -1,6 +1,7 @@
 let tickets = [];
 let currentResults = [];
 const TEST_MODE = false;
+let LOGGED_IN = false; 
 
 window.onload = function() {
     const logoutBtn = document.getElementById('logoutBtn');
@@ -11,6 +12,7 @@ window.onload = function() {
         logoutBtn.style.display = 'inline-block';
         profileBtn.style.display = 'inline-block';
         homeBtn.style.display = 'none';
+		LOGGED_IN = true; 
     } else {
         logoutBtn.style.display = 'none';
         profileBtn.style.display = 'none';
@@ -252,6 +254,11 @@ function displayResults(results) {
                 buyButton.textContent = 'Buy';
                 buyButton.className = 'buy-button';
                 buyButton.addEventListener('click', () => {
+					if (!LOGGED_IN) {
+					    alert("You must be logged in to buy a ticket");
+					    return;
+					}
+
 					const ticketID = ticket.ticketID; // Assuming ticket object has ticketID
 					const sellerID = ticket.user_id;   // Assuming ticket object has user_id
 					const buyerID = localStorage.getItem('user_id'); 
@@ -294,13 +301,21 @@ function displayResults(results) {
 
 				// Create heart icon (using Unicode for heart)
 				favoriteButton.innerHTML = '&#9825;'; // Empty heart
-				const userID = localStorage.getItem('user_id');
 				
-				isFavoriteTicket(ticket.ticketID, userID, favoriteButton);  
 				
+				if (LOGGED_IN) {
+					const userID = localStorage.getItem('user_id');
+					isFavoriteTicket(ticket.ticketID, userID, favoriteButton);  
+				}
 					
 
 				favoriteButton.addEventListener('click', () => {
+					
+					if (!LOGGED_IN) {
+					    alert("You must be logged in to favorite tickets");
+					    return;
+					}
+					
 				    const isFavorited = favoriteButton.classList.contains('favorited');
 
 				    if (isFavorited) {
