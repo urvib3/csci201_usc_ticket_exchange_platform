@@ -61,6 +61,7 @@ nav button {
     color: #d70016;
     border: 3px solid #d70016;
     border-radius: 6px;
+    width: 110px; 
 
     cursor: pointer;
     transition: all 0.3s ease;

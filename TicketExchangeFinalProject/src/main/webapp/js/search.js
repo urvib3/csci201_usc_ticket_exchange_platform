@@ -2,6 +2,23 @@ let tickets = [];
 let currentResults = [];
 const TEST_MODE = false;
 
+window.onload = function() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    const profileBtn = document.querySelector('button[onclick="window.location.href=\'profile.html\'"]');
+    const homeBtn = document.querySelector('button[onclick="window.location.href=\'entryPage.html\'"]');
+    
+    if (localStorage.getItem('user_id')) {
+        logoutBtn.style.display = 'inline-block';
+        profileBtn.style.display = 'inline-block';
+        homeBtn.style.display = 'none';
+    } else {
+        logoutBtn.style.display = 'none';
+        profileBtn.style.display = 'none';
+        homeBtn.style.display = 'inline-block';
+    }
+};
+
+
 if (TEST_MODE) { //local json
 	fetch('db/tickets.json')
     .then(response => response.json())

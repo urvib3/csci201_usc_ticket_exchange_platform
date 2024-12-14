@@ -22,7 +22,7 @@ fetch('Search')
 			document.getElementById('status').textContent = ticket.status === 0 ? 'Not Sold' : 'Sold';
 
             // Prepare ticket details text for QR code
-            const qrText = `Event: ${ticket.eventName}\nDate: ${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)} - ${String(ticket.endDate).slice(4, 6)}-${String(ticket.endDate).slice(6, 8)}-${String(ticket.endDate).slice(0, 4)}\nLocation: ${ticket.location || 'Not specified'}\nPrice: $${ticket.ticketPrice}\nTickets: $${ticket.numTickets}\nDetails: ${ticket.additionalInfo}`;
+            const qrText = `Event: ${ticket.eventName}\nDate: ${String(ticket.startDate).slice(4, 6)}-${String(ticket.startDate).slice(6, 8)}-${String(ticket.startDate).slice(0, 4)} - ${String(ticket.endDate).slice(4, 6)}-${String(ticket.endDate).slice(6, 8)}-${String(ticket.endDate).slice(0, 4)}\nLocation: ${ticket.location || 'Not specified'}\nPrice: $${ticket.ticketPrice}\nTickets: ${ticket.numTickets}\nDetails: ${ticket.additionalInfo}`;
 			
 			console.log(qrText);
 			
