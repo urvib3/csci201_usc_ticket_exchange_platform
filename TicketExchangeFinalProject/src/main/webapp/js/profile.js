@@ -102,7 +102,7 @@ function toggleSection(section) {
             isOutgoingOffersActive = true;
             activateButton('outgoing-offers-button');
             fetchOutgoingOffers();
-            document.getElementById('add-button-container').style.display = 'block';
+            document.getElementById('add-button-container').style.display = 'none';
             break;
 
         case 'favorites':
